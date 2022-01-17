@@ -47,7 +47,7 @@ const config = {
         items: [
           
           {
-            href: 'https://github.com/jatobrun/docs',
+            href: 'https://github.com/jatobrun/docs/',
             label: 'GitHub',
             position: 'right',
           },
@@ -70,7 +70,7 @@ const config = {
             items: [
               {
                 label: 'LinkedIn',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                href: 'https://www.linkedin.com/in/jamil-andres-torres-brunes-0b20631a5/',
               }
             ],
           },
@@ -87,8 +87,9 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Jatobrun.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: require('prism-react-renderer/themes/github'),
+        darkTheme: require('prism-react-renderer/themes/dracula'),
+        additionalLanguages: ['docker', 'git', 'dart', 'go', 'yaml']
       },
     }),
 };
