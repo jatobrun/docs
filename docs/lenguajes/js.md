@@ -75,10 +75,174 @@ Algunos ejemplos de esto
 :::info
 El ultimo caso descubrimos un comportamiento peculiar de js el cual se lo conoce como 
 `implicit type coercion`, para revisar mas acerca del tema revisa la [seccion](#implicit-type-coercion)
+:::
+#### Indexing
+Los `string` tienen algo llamado `index` lo cual es la posicion que tiene cada uno de los caracteres
+que conforman el `string`. Por ejemplo 
+```js
+"James"[0];
+```
+>**Returns:** "J"
+
+![indexing](/img/js/indexing.png)
+
+#### Escaping Characters
+Los `escaping characters` le dicen a `js` que ignore el significado del caracter y use 
+su valor de forma literal. Por ejemplo la comilla doble `"`, js la usa para determinar 
+el inicio o final de un string al usar `\"` le decimos al interpreter que tome el valor literal 
+que es la comilla doble.
+
+Los caracteres especiales que queremos skippear son:
+
+- `\\` con esto tenemos un `\` dentro del string
+- `\"` obtenemos una comilla doble en el string 
+- `\'` obtenemos una comilla simple en el string 
+- `\n` salto de linea 
+- `\t` agregar un tab 
+
+:::tip
+`\\` los usamos en los **Paths**
+:::
+
+#### Comparaciones 
+Podemos usar los mismo operadores logicos que usamos en los numeros para comparar strings. Estos 
+son:
+- `==`
+- `!=`
+- `>`
+- `<`
+
+Al comparar `strings` debemos tomar en consideracion dos cosas que hace el interpreter 
+de `js`:
+
+- `case-sensitive`
+
+```js
+"Y" != "y"
+```
+> **Returns:** True
+
+- `internal-working`
+Quiere decir que el interpreter de `js` compara caracter por caracter con su respectiva 
+representacion `ASCII` para determinar si los caracteres son iguales
+
+
+### Boleanos
+Un `boolean` es un tipo de dato que solo puede contener dos valores `true` o `false`.
+Cada que realizamos una comparacion en `js` siempre como resultado tendremos un `boolean`
+
+
+:::tip
+Los `booleans` tambien se pueden representar con numeros `0` es `false` y `1` es `true
+:::
+
+### Null, Undefined y NaN
+- `null` es un tipo de dato que represanta que el valor es nada, es decir, que
+el valor totalmente vacio.
+
+```js 
+var signedIn = null;
+console.log(signedIn);
+```
+- `Undefined` es un tipo de dato que representa la ausencia de valor, es decir, que no tiene 
+valor.
+```js
+var signedIn;
+console.log(signedIn);
+```
+- `NaN` viene de `Not-A-Number` es un error que se produce
+cuando realizamos operaciones matematicas erroneas por ejemplo:
+
+```js
+// calcular la raiz cuadrada de un numero negativo retorna un NaN
+Math.sqrt(-10)
+
+// Tratar de dividr un string con un numero retorna NaN
+"hello"/5
+```
+
+
+## Type conversion 
+Cada que utilizamos el operador `==` lo que realiza el interpreter de `js` es realizar una conversion 
+numerica a cada lado de los iguales para de ahi proceder a saber si dicha conversion numerica es igual.
+```js
+"1" == 1
+```
+> **Return:** true
+```js
+0 == false
+```
+> **Return:** true
+```js
+' ' == false
+```
+> **Return:** true
+
+Por eso debemos tenemos tener cuidado al utilizar el operador `==`, por otro lado si no queremos realizar 
+dicha conversion antes de realizar la comparacion usamos este operador `===`.
+
+:::tip
+Por norma general es una mala practica usar el operador `==` o `!=` debido a que no representa realmente 
+las necesidades que estamos buscando, por ende, mejor usar siempre `===` o `!==`
+
+Ejemplos:
+```js
+"1" === 1
+```
+> **Return:** false
+```js
+0 === false
+```
+> **Return:** false
+```js
+0 !== true
+```
+> **Return:** true
+
+:::
 
 ## implicit type coercion
+`Js` es un lenguaje considerado como `loosely type language`. Basicamente lo que significa es que 
+al momento de escribir codigo de `Js` no tenemos que especificar el tipo de dato de la variable. Por ende 
+el interpreter de `js` al momento de ejecutar el codigo automaticamente los convierte a sus `"apropiados"`
+tipos de datos.
 
-FALTAAAAAAA
+Ejemplos:
+
+```js
+"julia" + 1
+```
+>**Returns:** "julia1"
+
+:::note
+`Strongly typed language`: Son todos los lenguajes de programacion que generan errores al no coincidir
+los tipos de datos
+
+Ejemplo:
+
+```ts
+int count = 1;
+string name = "Julia";
+double num = 1.2932;
+float price = 2.99;
+```
+
+```js
+// equivalent code in JavaScript
+var count = 1; 
+var name = "Julia";
+var num = 1.2932;
+var price = 2.99;
+```
+
+:::
+
+## Semicolons
+Los semicolons son `;` y nos indica el final de cada linea, aunque `js` trata de inferir 
+cuando una linea de codigo termina al igual que [implicit type coercion](#implicit-type-coercion). 
+
+Es una buena practica al finalizar cada linea de codigo usar el `;` para prevenir algun 
+comportamiento extraño
 
 ## Variables 
 Las `variables` son las responsables de almacenar informacion, podemos almacenar 
@@ -136,6 +300,8 @@ que trata de hacer la funcion al momento de refactorizar.
 ```
 
 ## Condiciones 
+
+
 
 ## Bucles 
 
