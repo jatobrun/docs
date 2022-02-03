@@ -300,7 +300,10 @@ que trata de hacer la funcion al momento de refactorizar.
 ```
 
 ## Condiciones 
+Una herramienta muy util para pensar como la maquina
+ es usar `diagramas de flujo`.
 
+ 
 
 
 ## Bucles 

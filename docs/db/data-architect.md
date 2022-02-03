@@ -1,0 +1,151 @@
+---
+sidebar_position: 5
+---
+
+# Introduccion 
+Muchas mas empresas empiezan a tener decisiones basadas en datos 
+por ende las empresas empiezan a tener mas y mas datos los cuales 
+en muchos casos estan en una forma desorganizada. 
+
+Aqui es donde juega un papel importante los arquitectos de datos 
+ya que son los encargados de organizar y crear estructuras a esa 
+cantidad de datos desorganizados. Con la intencion de que dicha 
+informacion aporte la informacion que deberia aportar.
+
+Los arquitectos de datos buscan resolver los problemas de cada una
+de las diferentes areas de la empresa de manera eficiente y unica 
+cumpliendo cada una de sus necesidades.
+
+## StakeHolders
+Es una persona o grupo de personas interesadas en las necesidades 
+del negocio o cualquier dueño de algun producto o servicio que sea 
+importante para la empresa.
+
+Los arquitectos de datos son unos facilitadores o solucionadores 
+de problemas para los stakeholders. Ademas que trabajan juntos.
+
+## Cuando no usarla 
+Como Arquitecto de datos tu tiempo es valioso, la arquitectura de 
+datos es importante es por esto que necesitas saber algunas banderas 
+rojas que debes solucionar antes de entrar en la arquitectura de datos.
+
+- No hay un problema especifico
+- No hay data 
+- El problema no esta alineado al negocio
+- Proyecto con palabras de moda y que no tienen idea de que es lo que dicen
+
+## Cuando usarla
+- Cuando tenemos problemas basados en datos 
+- Cuando el problema cambia de foco 
+- Cuando realizamos upgrades o updates en la organizacion
+
+## Historia
+
+1. 1970 Codd publica un paper sobre modelamiento de datos de largas entidades 
+financieras
+2. 1976 Peter Chen crea el modelo entidad relacion (ERD)
+3. 1979 sale a la luz la primera base de datos empresarial (Oracle)
+4. 1986 crean el SQL como estandar para las abses de datos 
+5. 1989 SQL server
+6. 2006 Big data salio a la luz (Aws y Hadoop)
+
+## Que hace un arquitecto de datos?
+Un arquitecto de datos busca crear la mejor respuesta a las siguientes 
+preguntas:
+
+1. Que es lo que el negocio trata de hacer?
+2. Como los datos pueden ayudar?
+
+Por ende los arquitectos de datos se centran en ambos mundos el tecnico y 
+el administrativo. Somos el puente que conecta ambos mundos
+
+Para conseguir esto los arquitectos de datos hacen lo siguiente:
+
+1. entender las necesidades del negocio. La mejor bases de datos 
+no son nada sino son adaptadas a las necesidades del negocio
+
+2. Luego de entender el negocio, vemos como estan las bases de datos, 
+que pipelines existen, interfaces de usuarios existen
+
+3. Por ultimo diseñamos soluciones que cumplen los objetivos del negocio
+con los elementos que se dispongan
+
+## Caracteristicas 
+- Los problemas del negocio primero, centrarse en el problema no en la 
+tecnologia
+- Integridad de la informacion, que sea consistente y precisa
+- Governancia de la informacion, seguridad y dueños (quien la maneja,
+quien es el dueño y quien tiene aceso a la informacion)
+- Escalabilidad y flexibilidad, hay que planear para el futuro, crecimientos 
+en usuario, crecimientos en data, posibles cambios que puede sufrir la informacion
+- Retencion, Almancenamiento de la informacion, backups, retencion de la informacion
+
+:::tip
+Para forzar la integridad de los datos debemos:
+- ingresar la informacion una sola vez.
+- utilizar id para diferenciar los elementos.
+- usar esos id en las otras tablas
+:::
+
+:::note
+Escalibidad tiene que ver con la cantidad de carga o demanda que puede sufrir
+mi base de datos 
+
+Flexibilidad tiene que ver con como mi base de datos se ajusta a nuevas necesidades
+:::
+
+
+## Soluciones 
+
+### Integridad de los datos 
+
+- Podemos usar id con el fin de no repetir informacion 
+- reducir la cantidad de campos que deben escribirse
+- poner algoritmos de fuzzy matching antes de escribir en la db 
+- Reglas al momento de escribir en las tablas 
+
+### Governancia de los datos 
+
+- Podemos usar seguridad a nivel de base de datos para controlar 
+quien puede escribir o leer datos de la base de datos 
+
+- Podemos tambien usar reglas a nivel de tablas para controlar que usuarios 
+tiene accesos a esas tablas con informacion sensible 
+
+
+### Escalabilidad 
+
+- Replicas de la base de datos, es decir realizar copias de la base de datos 
+en diferentes servidores con y tener un balanceador de carga entre ellos 
+ayudara a disminuir el tiempo de lectura 
+a los usuarios (No disminuye el tiempo de escritura).
+
+- Fragmentar la base de datos ayuda a disminuir el tiempo de escritura ya que tenemos 
+multilples writer donde podemos escribir pero aumentara nuestro tiempo de escritura 
+porque debemos buscar en cada una de esas partes para encontrar el dato que queremos.
+
+### Flexibilidad 
+
+- esquemas flexibles 
+
+
+## Requerimientos funcionales y de negocio 
+
+Los 3 requerimientos de negocios mas comunes son:
+
+- reportes, se necesita **leer** la informacion, esta no cambia tan rapido o de manera 
+frecuente. (OLAP) Online analytical processing normalmente se usan Datawarehouse para este
+tipo de requerimiento.
+- transacionales, se **agrega o actualiza** bastante informacion. (OLTP)
+o Online transaction Processing esta diseñado para esto, normalmente se usan bases de datos
+- computacionales, la data es diseñada para facilitar computaciones pesadas
+
+Para saber que sistema debemos implementar OLAP VS OLTP nos realizamos la siguiente pregunta 
+
+Que tan rapido necesito que la informacion se refresque?
+
+- Si es una semana, cada dia o cada mes puedo usar OLAP
+- Si necesito que la informacion se refesque rapido OLTP
+
+
+
