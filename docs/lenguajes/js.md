@@ -303,6 +303,40 @@ que trata de hacer la funcion al momento de refactorizar.
 Una herramienta muy util para pensar como la maquina
  es usar `diagramas de flujo`.
 
+### If...Else 
+Nuestra primera estructura de flujo es la condicion `if...else`. Cosas a tener en cuenta 
+sobre esta estructura condicional:
+1. El valor dentro del `if` siempre sera convertido a `true` o `false`.
+2. Depende de dicho valor se ejecuta el bloque del codigo, es decir, si sale `true`
+se ejecuta el bloque que acompaña al `if` si es `false` el bloque del `else`.
+3. Nunca van a ejecutarse ambos bloques de codigos a la vez
+4. Los bloques de codigos son separados por llaves `{...}` con el fin de separarlos.
+
+```js
+if (/* this expression is true */) {
+  // run this code
+} else {
+  // run this code
+}
+```
+### ElseIf
+En muchas de las situaciones dos condiciones son suficientes, pero que pasa en la caso 
+donde tenga una situacion mas compleja con mas de dos condiciones?. Aqui entra en juego 
+el `else if`
+
+```js
+var weather = "sunny";
+
+if (weather === "snow") {
+  console.log("Bring a coat.");
+} else if (weather === "rain") {
+  console.log("Bring a rain jacket.");
+} else {
+  console.log("Wear what you have on.");
+}
+```
+
+
  
 
 
