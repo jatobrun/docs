@@ -119,6 +119,22 @@ El codex se divide en 4 bloques los cuales son:
 
 Cuando tenemos demasiada informacion sufrimos el efecto `prominencia`
 
+### Tipos de investigacion
+- Investigacion cuantitativa 
+- Investigacion cualitativa 
+- Investigacion primaria 
+- Investigacion secundaria 
+- Investigacion basica 
+- Investigacion aplicada 
+- Investigacion exploratoria
+- Investigacion evaluativa 
+
+### Tacticas de investigacion 
+
+- Analisis de material escrito 
+- Investigacion Etnografica 
+- Investigacion de mercado 
+- Experiencia de Usuario 
 
 ## Definiendo 
 
