@@ -53,16 +53,85 @@ En Jira tenemos dos roles principales **users** y **admins**
 tambien puedes ver el progreso de tus compañeros en sus tareas y compartir tu avance 
 con el equipo 
 
-- admins: Como admin tendras las siguientes tareas, administrar permisos y planear recursos 
+- admins: Como admin tendras las siguientes tareas, administrar permisos y 
+planear recursos 
 
 
 ## Terminologia
-- Projects: es una coleccion de issues. Para nombrar los proyectos usamos el style guide de cada
-equipo de trabajo 
+- Projects: es una coleccion de issues. Para nombrar los proyectos usamos el 
+style guide de cada equipo de trabajo 
 
-- Board: Es una forma de poder visualizar el estado de las issues
-- Issues son las tareas que cada miembro del equipo debe realizar. A medida que usemos mas Jira 
-las tareas pueden ir creciendo. El tiempo de las tareas varia pueden existir tareas de un mes 
-como tambien tareas que se completen en algunas horas. Principalmente las `issues` las usamos 
-para actualizar el trabajo y agregar informacion util. Algunos conocen las issues como task, 
-request, tickets lo mejor es definir un nombre y usar el mismo estandar para no entrar en confunsion
+- Board: Es una forma de poder visualizar el estado de las issues. Hay dos 
+tipos de boards mas usados los cuales son `scrum` y `kanban`, el scrum esta 
+dividido por sprints y solo muestra las tareas de ese sprint mientras que el 
+kanban muestra todas las tareas del backlog. Como los proyectos los boards 
+se los puede nombrar 
+
+- Workflow: Es la secuencia de estados por los que un issue pasa
+
+- Issues son las tareas que cada miembro del equipo debe realizar. A medida que
+ usemos mas Jira las tareas pueden ir creciendo. El tiempo de las tareas varia 
+pueden existir tareas de un mes como tambien tareas que se completen en algunas 
+horas. Principalmente las `issues` las usamos para actualizar el trabajo y 
+agregar informacion util. Algunos conocen las issues como task, request, 
+tickets lo mejor es definir un nombre y usar el mismo estandar para no entrar
+ en confusion
+
+## Navegacion
+
+Existen dos barras de navegacion principales las cuale son:
+- main navigation bar: ayuda a encontrar informacion sobre tus 
+proyectos, tu trabajo y tus companeros de equipo 
+- project sidebar : mientras que el sidebar te da informacion 
+acerca del proyecto actual, podemos observar boards y el backlog
+
+
+## Issues
+en los issues tenemos atributos que podemos editar
+
+- fecha de finalizacion 
+- persona encargada 
+- comentarios de los miembros del equipo
+- prioridades
+- enlaces 
+- files
+
+algunos aspectos importantes que tiene el issue son:
+- issue key es el identificador del task
+- summary es el titulo de la tarea
+- links and attachments para incluir mas informacion acerca del 
+task
+- description sirve para dar mas informacion sobre el issue 
+- comentarios son para agregar preguntas o mencionar personas 
+- status dropdown nos ayuda a cambiar el estado del issue
+- due date es la fecha donde el issue se debe completar
+- asignee es la persona asignada a la tarea 
+- reporte es la persona que creo el issue
+
+### Tipos 
+para poder identificar el tipo de la tarea y llevar un mejor 
+control sobre las cosas que se hacen o tener una idea de que 
+debemos hacer.
+
+#### Epic 
+es una tarea bastante larga mas bien como una iniciativa. 
+Normalmente es una tarea que se puede dividir en sub task
+
+#### Task
+es el tipo de tarea mas comun, contienen informacion mas detallada 
+de lo que se debe hacer
+
+#### Story
+son tareas en un lenguaje no tecnico y normalmente suelen ser 
+requerimientos o features que solicita el usuario o cliente 
+
+#### Bug
+describee un problema o un error
+
+#### Subtask
+se las utiliza para dividir los bugs, story, epics or task en 
+tareas mas especificas
+
+## Vistas 
+en jira existen vistas importante para poder monitorear nuestro 
+trabajo y el de nuestro equipoß
