@@ -56,5 +56,13 @@ con el equipo
 - admins: Como admin tendras las siguientes tareas, administrar permisos y planear recursos 
 
 
-##
-Issues son las tareas que cada miembro del equipo debe realizar 
+## Terminologia
+- Projects: es una coleccion de issues. Para nombrar los proyectos usamos el style guide de cada
+equipo de trabajo 
+
+- Board: Es una forma de poder visualizar el estado de las issues
+- Issues son las tareas que cada miembro del equipo debe realizar. A medida que usemos mas Jira 
+las tareas pueden ir creciendo. El tiempo de las tareas varia pueden existir tareas de un mes 
+como tambien tareas que se completen en algunas horas. Principalmente las `issues` las usamos 
+para actualizar el trabajo y agregar informacion util. Algunos conocen las issues como task, 
+request, tickets lo mejor es definir un nombre y usar el mismo estandar para no entrar en confunsion
