@@ -336,12 +336,168 @@ if (weather === "snow") {
 }
 ```
 
+### Operadores Logicos
 
- 
+| Operadores | Significado | Ejemplo | Como funciona?|
+|------------ | ----------- | ------- | ------------- |
+| `&&` | AND | `valor1 && valor2` | Retorna `true` si los **dos valores**, `valor1` **y** `valor2` son verdadero |
+| `!` | NOT | `!valor1` | Retorna el valor `opuesto`. Si  `valor1` es `verdadero` retorna `falso` |
+| \|\| | OR | valor1 \|\| valor2 | Retorna `true` si **uno** de los valores, `valor1` **y** `valor2` son verdadero |
 
+:::note
+Todas las expresiones logicas son evaluadas de izquierda a derecha, 
+Podemos usar parentesis para darle mayor prioridad o agrupar expresiones.
+:::
 
+#### Tablas de verdad 
+| A | B | A&&B | 
+|-- |-- | ---- |
+| verdadero | verdadero | verdadero | 
+| verdadero | falso | falso |
+| falso | verdadero |  falso | 
+| falso | falso |  falso | 
+
+| A | B | A\|\|B | 
+|-- |-- | ---- |
+| verdadero | verdadero | verdadero | 
+| verdadero | falso | verdadero |
+| falso | verdadero |  verdadero | 
+| falso | falso |  falso | 
+
+### Truthy and Falsy
+En Javascript tenemos el concepto de inherit, esto se debe a que el interpreter 
+transforma la expresion al contexto que se esta usando. Si estamos en el contexto
+booleano toda la expresion la convertira a sus especificos valores booleanos.
+
+Algunos valores que por default al transformarlo al contexto booleano retornan `falso`
+
+1. `false`
+2. `null` 
+3. `undefined`
+4. `0`
+5. `""`
+6. `NaN`
+
+Todos los valores que no pertenezcan a esta lista son considerados `truthy` value. Lo 
+que quiere decir que dichas expresiones al ser evaluadas en el contexto booleano retornan 
+`verdadero`
+
+Por ejemplo:
+1. `"null"`
+2. `2`
+3. `[]`
+4. `{}`
+5. `true`
+
+### Operador Ternario
+El operador ternario es una forma de re escribir el tradicional `if else` de una forma 
+mas corta y legible
+
+```
+condicion ? (si la condicion es verdadera) : (si la condicion es falsa)
+```
+
+Ejemplo 
+
+```js
+var isGoing = true;
+var color;
+
+if (isGoing) {
+  color = "green";
+} else {
+  color = "red";
+}
+```
+Este bloque de codigo lo podemos cambiar por 
+
+```js
+var isGoing = true;
+var color = isGoing ? "green" : "red";
+```
+
+### Switch 
+Una forma de refactorizar los `if else` encadenados es usar `switch`
+```js
+if (option === 1) {
+  console.log("You selected option 1.");
+} else if (option === 2) {
+  console.log("You selected option 2.");
+} else if (option === 3) {
+  console.log("You selected option 3.");
+} else if (option === 4) {
+  console.log("You selected option 4.");
+} else if (option === 5) {
+  console.log("You selected option 5.");
+} else if (option === 6) {
+  console.log("You selected option 6.");
+}
+```
+```js
+var option = 3;
+
+switch (option) {
+  case 1:
+    console.log("You selected option 1.");
+    break;
+  case 2:
+    console.log("You selected option 2.");
+    break;
+  case 3:
+    console.log("You selected option 3.");
+    break;
+  case 4:
+    console.log("You selected option 4.");
+    break;
+  case 5:
+    console.log("You selected option 5.");
+    break;
+  case 6:
+    console.log("You selected option 6.");
+    break; // technically, not needed
+}
+```
 ## Bucles 
+Los bucles nos ayuda a ejecutar un bloque de codigo repetidamente 
+por un numero fijo de veces o mientras cumplamos alguna condicion.
+Basicamente todos los bucles nos ayudan a repetir un bloque de codigo 
+una cantidad x de veces.
 
+Existen 3 partes importantes que todos los bucles tienen los cuales son:
+
+1. Cuando empezar
+
+2. Cuando terminar
+
+3. Como obtenemos el siguiente elemento
+
+```js
+
+var start = 0; // when to start
+while (start < 10) { // when to stop
+  console.log(start);
+  start = start + 2; // how to get to the next item
+}
+```
+
+:::caution
+Si no tenemos la condicion de cuando terminar tendremos un bucle infinitoß
+:::
+
+### Bucle While
+El bucle while nos permite repetir un bloque de codigo cuantas veces
+la condicion sea verdadera veamos un ejemplo de como contar del 1 al 
+1000
+
+```js 
+var number = 0; // when to start
+while (numer <= 10000) { // when to stop
+  console.log(number);
+  number = number + 1; // how to get to the next item
+}
+```
+
+### Bucle For
 ## Funciones 
 
 ## Arrays
