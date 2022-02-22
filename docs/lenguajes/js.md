@@ -749,6 +749,78 @@ funciones arriba y la declaracion y asignacion de nuestras variables arriba
 tambien
 :::
 
+### Function expression 
+es una nueva forma para declarar una funcion, debido a que usamos 
+una variable para declararla. Es decir cuando una funcion es 
+almacenada en una variable.
+
+```js 
+var catSays = function(max) {
+  var catMessage = "";
+  for (var i = 0; i < max; i++) {
+    catMessage += "meow ";
+  }
+  return catMessage;
+};
+
+```
+:::note
+las funciones que no tienen nombres se las conoce como funciones 
+anonimas
+este tipo de funciones son buenas para evitar el hoisting por lo
+que esta relacionado con la asignacion de variables y no con la 
+declaracion.
+:::
+#### Callbacks 
+son las funciones que se pasan como argumento a otras funciones
+
+```js
+// function expression catSays
+var catSays = function(max) {
+  var catMessage = "";
+  for (var i = 0; i < max; i++) {
+    catMessage += "meow ";
+  }
+  return catMessage;
+};
+
+// function declaration helloCat accepting a callback
+function helloCat(callbackFunc) {
+  return "Hello " + callbackFunc(3);
+}
+
+// pass in catSays as a callback function
+helloCat(catSays);
+```
+
 ## Arrays
+Los arrays es una estructura de datos que nos permite almacenar 
+multiples valores ademas son organizados. Los arrays empiezan
+desde el 0 y no desde el 1 como normalmente nosotros listamos 
+los elementos de una lista. Cada elemento en un array debe estar
+separado por una coma
+
+Podemos crear un array con `[]`
+```js
+// creaamos a `donuts` array con 3 elementos de tipo string
+var donuts = ["glazed", "powdered", "jelly"];
+```
+tambien podemos crear arrays con multiplos tipos de datos 
+```js 
+// creamos a `mixedData` array con una mezcla de tipos de datos
+var mixedData = ["abcd", 1, true, undefined, null, "all the things"];
+```
+Tambien podemos tener arrays anidados y normalmente escribimos
+cada elemento en lineas separadas con el fin de mejorar 
+la legibilidad 
+
+```js
+var arraysInArrays = [
+  [1, 2, 3], 
+  ["Julia", "James"], 
+  [true, false, true, false]
+];
+```
+### Indexing
 
 ## Objetos
