@@ -490,15 +490,264 @@ la condicion sea verdadera veamos un ejemplo de como contar del 1 al
 1000
 
 ```js 
-var number = 0; // when to start
-while (numer <= 10000) { // when to stop
+var number = 0; // empiezo
+while (numer <= 10000) { // cuando termino
   console.log(number);
-  number = number + 1; // how to get to the next item
+  number = number + 1; // paso al siguiente iteracion
 }
 ```
 
 ### Bucle For
+La principal diferencia entre el bucle for y el while es que en el for 
+debemos escribir las 3 partes que todo bucle debe tener de forma explicita
+
+```js
+for ( inicio; fin; paso ) {
+  // do this thing
+}
+```
+### Bucles anidados
+Son bucles dentro de otros bucles 
+
+```js
+for(var i = 0; i < 6; i++){
+  for(var x = 0; x < 3; x++){
+    console.log(x, y);
+  }
+}
+```
+
+### Incrementos y Decrementos 
+
+```js 
+x++ or ++x // lo mismo que x = x + 1 
+x-- or --x // lo mismo que x = x - 1
+x += 3 // lo mismo que x = x + 3
+x -= 6 // lo mismo que x = x - 6
+x *= 2 // lo mismo que x = x * 2
+x /= 5 // lo mismo que x = x / 5
+```
+
+## Scopes 
+El scope basicamente viene a ser como el alcance de algo, el alcance de una variable
+o el alcance de una funcion. Existen 3 tipos de scope en JS
+
+1. Global scope: Es cuando podemos usar la variable en cualquier parte del codigo
+aqui podemos decir que las variables son `globales`
+
+2. Function scope: Solo podemos usar la variable dentro de la funcion aqui podemos 
+decir que las variables son `locales`
+
+3. Block scope: Solo podemos usar la variable dentro de `{}`
+
+Podemos usar este ejemplo para ver la relacion de los scopes 
+
+```js
+/*
+ * Global scope. 
+ * This variable declared outside of any function is called Global variable. 
+ * Hence, you can use this anywhere in the code
+ */
+var opinion = "This nanodegree is amazing";
+
+// Function scope
+function showMessage() {
+    // Local variable, visible within the function `showMessage`
+    var message = "I am an Udacian!"; 
+
+    // Block scope
+    {
+          let greet = "How are you doing?";
+        /*
+         * We have used the keyword `let` to declare a variable `greet` because variables declared with the `var` keyword can not have Block Scope. 
+         */
+    } // block scope ends
+
+    console.log( message ); // OK
+    console.log( greet ); // ERROR. 
+    // Variable greet can NOT be used outside the block
+
+    console.log( opinion ); // OK    to use the gobal variable anywhere in the code
+
+} // function scope ends
+```
+:::tip
+Tratar de lo posible no usar global scope o variables globales 
+ya que estas al final pueden sufrir de [shadowing](#shadowing) o conflicto de 
+nombres
+:::
+
+### Declaracion de variables 
+Hay 3 formas de poder declarar variables dentro de js:
+
+1. `let` es una nueva forma de declarar variables en cualquier 
+scope en js. El valor de la variable pueed ser cambiado o reasignado
+en cualquier parte del codigo
+
+2. `const` es una forma de declarar constantes en cualquier 
+parte del scope (global, function or block) y este valor no puede ser 
+cambiado o reasignado en ninguna parte del codigo
+
+3. `var` era la forma antigua de declarar variables en js. Solo podemos 
+declararla en dos tipos de scopes (global y function).
+
 ## Funciones 
+las funciones son bloques de codigo que podemos reutilizar a lo largo del 
+codigo con el fin de no estar repitiendo tantas veces el mismo codigo. Es 
+como una forma de empaquetar funcionalidades que se repiten.
+
+Podemos tener una funcion con multiples parametros 
+
+```js
+function doubleGreeting(name, otherName) {
+  // code to greet two people!
+}
+```
+O podemos tener una funcion sin parametros
+
+```js 
+function sayHello() {
+  var message = "Hello!"
+  console.log(message);
+}
+```
+
+Las funciones tienen dos estados cuando las declaramos y cuando las llamamos
+ejemplos anteriores son declaracion de funciones pero para llamarlas hacemos lo
+siguiente 
+
+```js 
+// declarar la variables say hello
+function sayHello() {
+  var message = "Hello!"
+  return message; // returns value instead of printing it
+}
+
+// llamamos a la funcion sayHello()
+console.log(sayHello());
+
+```
+
+### Parametros vs Argumentos 
+Los parametros son las variables que escribimos cuando declaramos una funcion,
+mientras que los argumentos son los valores que toman esos parametros cuando 
+invocamos a la funcion.
+
+ejemplo 
+
+```js 
+// a y b son parametros de la funcion
+function findAverage(a, b) {
+  var answer = (a + b) / 2;
+  return answer;
+}
+// 5 y 9 son los argumentos de la funcion
+var avg = findAverage(5, 9);
+```
+
+### Return 
+La palabra reservada `return` nos permite detener la ejecucion de una funcion 
+y retorna un valor de vuelta al que la invoco.
+
+Sino definimos el valor a retornar en la funcion por defecto retorna `undefined`
+
+### Shadowing 
+es cuando reeescribrimos una variable del scope, es decir, tenemos una variable 
+global y dentro de una funcion reescribrimos o cambiamos su valor.
+
+Ejemplo cuando hacemos shadowing
+```js 
+
+var x = 1;
+
+function addTwo() {
+  x = x + 2;
+}
+
+addTwo();
+x = x + 1;
+console.log(x); // imprime 4
+```
+Ejemplo como no hacer shadowing 
+
+```js
+var x = 1;
+
+function addTwo() {
+  var x = x + 2;
+}
+
+addTwo();
+x = x + 1;
+console.log(x); // imprime 2 
+```
+
+### Hoisting
+- Js al momento de interpretar el codigo eleva todas las funciones del codigo
+y ademas todas las declaraciones de las variables.
+- No eleva la asignacion de las variables.
+
+Ejemplo 1
+Esto es lo que escribimos 
+```js
+sayHi("Julia"); // imprime -> undefined Julia
+
+function sayHi(name) {
+  console.log(greeting + " " + name);
+  var greeting;
+}
+```
+Esto es lo que interpreta la computadora
+
+```js
+function sayHi(name) {
+  var greeting;
+  console.log(greeting + " " + name);
+  
+}
+sayHi("Julia"); // por eso imprime -> undefined Julia
+```
+:::note 
+recordemos que siempre que declaramos una variable
+sino le asignamos ningun valor, su valor por defecto sera
+[undefined](#null-undefined-y-nan)
+:::
+Ejemplo 2 
+Esto es lo que escribimos 
+```js
+sayHi("Julia"); // imprime -> undefined Julia
+
+function sayHi(name) {
+  console.log(greeting + " " + name);
+  var greeting = "Hello";
+}
+```
+Esto es lo que la computadora interpreta
+
+```js
+function sayHi(name) {
+  var greeting;
+  console.log(greeting + " " + name);
+  greeting = "Hello";
+  
+}
+sayHi("Julia"); // por eso imprime -> undefined Julia
+```
+Ejemplo 3 (Asi evitamos el hoisting)
+```js 
+function sayHi(name) {
+  var greeting = "Hello";
+  console.log(greeting + " " + name);
+}
+
+sayHi("Julia");
+```
+
+:::tip 
+Para poder evitar el hoisting debemos mantener la declaracion de nuestras 
+funciones arriba y la declaracion y asignacion de nuestras variables arriba 
+tambien
+:::
 
 ## Arrays
 
