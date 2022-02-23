@@ -822,5 +822,370 @@ var arraysInArrays = [
 ];
 ```
 ### Indexing
+Los indices empiezan desde 0, para acceder a un elemento podemos
+usar su posicion y ademas los brackets `[]`
+
+```js
+var donuts = ["glazed", "powdered", "sprinkled"];
+console.log(donuts[0]); // "glazed" is the first element in the `donuts` array
+```
+Si usamos un indice para un elemento que no existe, js retorna 
+`undefined`
+
+Para cambiar un elemento del array podemos hacer lo siguiente 
+
+```js
+donuts[1] = "glazed cruller"; // changes the second element in the `donuts` array to "glazed cruller"
+console.log(donuts[1]); 
+```
+
+### Propiedades 
+Es informacion relevante sobre la estructura de datos 
+
+`length` es la propiedad mas comun de los arrays, la 
+cual nos permite saber cuantos elementos almacena.
+
+```js
+var donuts = ["glazed", "powdered", "sprinkled"];
+console.log(donuts.length); // imprime 3
+```
+
+### Metodos
+
+Los metodos en los arrays son funciones que nos permiten 
+modificar o hacer diferentes funciones con el array
+
+los metodos mas comunes en los arays son:
+
+1. Reverse: nos permite hacer un reverso en el orden 
+de los elementos
+
+2. Sort nos permite mezclar los elementos de un array 
+
+3. Push nos permite agregar elementos al final del array, ademas
+retorna la cantidad de elementos del array despues de agregar 
+al nuevo elemento. Su contraparte es unshift ya que agrega 
+en la primera posicion los elementos.
+
+4. POP Nos permite sacar el ultimo elemento del array, ademas 
+retorna el elemento que saco, su contraparte es shift ya que 
+elimina el primer elemento del array
+
+5. Por otro lado splice nos permite sacar elementos y en la misma
+posicion agregar nuevos elementos agregar elementos en cualquier
+ parte del array
+
+### Bucles 
+Cuando queremos hacer cambios en diferentes elementos de un array
+una posible solucion seria saber su indice y actualizarlo, esto 
+se puede convertir en una tarea bastante tediosa si tenemos que 
+hacerlo con muchos elementos para este tipo de siutaciones podemos
+usar bucles.
+
+```js
+var donuts = ["jelly donut", "chocolate donut", "glazed donut"];
+
+// the variable `i` is used to step through each element in the array
+for (var i = 0; i < donuts.length; i++) {
+    donuts[i] += " hole";
+    donuts[i] = donuts[i].toUpperCase();
+}
+```
+con ese bloque de codigo podemos recorrer los elementos de un 
+arreglo
+
+:::tip
+Utilizar un for a secas es una buena forma de recorrer un arreglo
+cuando queremos versatilidad o solo vamos a recorrer una 
+parte del arreglo
+:::
+
+#### Foreach
+Es una forma mas elegante de poder recorrer un arreglo si sabes
+ con inline que lo vas a recorrer de principio a fin 
+functions expresions
+
+```js
+words = ["cat", "in", "hat"];
+words.forEach(function(element, index, array) {
+  console.log("Word " + index + " in " + array.toString() + " is " + element);
+});
+```
+donde:
+- element representa al elemento como tal del array. 
+- index representa el indice de la posicion del elemento. 
+- array es una copia de todo el array.
+
+#### Map
+Otra forma de recorrer un arreglo bastante parecida al `forEach`
+pero su principal diferencia es que creamos un nuevo arreglo
+
+```js
+var donuts = ["jelly donut", "chocolate donut", "glazed donut"];
+
+var improvedDonuts = donuts.map(function(donut) {
+  donut += " hole";
+  donut = donut.toUpperCase();
+  return donut;
+});
+```
+### Arrays in Arrays
+En algunas ocasiones podemos tener arreglos dentro de arreglos 
+con el fin de formar grids o matrices
+
+Podemos obtener los elementos de una fila de la siguiente manera
+```js 
+
+var donutBox = [
+  ["glazed", "chocolate glazed", "cinnamon"],
+  ["powdered", "sprinkled", "glazed cruller"],
+  ["chocolate cruller", "Boston creme", "creme de leche"]
+];
+
+// here, donutBox.length refers to the number of rows of donuts
+for (var row = 0; row < donutBox.length; row++) {
+  console.log(donutBox[row]);
+}
+```
+mientras que para tener todos los elementos de forma individual 
+podemos hacer lo siguiente 
+
+```js 
+for (var row = 0; row < donutBox.length; row++) {
+  // here, donutBox[row].length refers to the length of the donut array currently being looped over
+  for (var column = 0; column < donutBox[row].length; column++) {
+    console.log(donutBox[row][column]);
+  }
+}
+```
 
 ## Objetos
+Sirven para encapsular toda la informacion y metodos o
+funcionalidades en nuestras propieas entidades. Seria como definir
+nuestros propios arrays. En otras palabras 
+es una estructura de datos que permite encapsular entidades por 
+medio de `keys`.
+
+```js
+var sister = {
+  name: "Sarah", 
+  age: 23,
+  parents: [ "alice", "andy" ],
+  siblings: ["julia"],
+  favoriteColor: "purple",
+  pets: true
+};
+```
+Algunas cosas que debemos recordar cuando creamos `objetos` en js.
+
+- La `key` representa una propiedad o un metodo y su valor 
+lo separamos por medio de `:`
+
+- el conjunto `key:value` los separamos entre commas `,`
+
+- El objeto esta encerrado por `{}`
+
+Para acceder a los valores de sus parametros los podemos hacer 
+de las siguientes formas 
+
+```js 
+
+sister["parents"] // bracket notation
+sister.parents // dot notation
+// ambos retornan [ "alice", "andy" ]
+```
+
+### Naming conventions 
+
+- No usar comillas para las `keys`. La razon es sencilla podemos
+llegar a tener error cuando usemos dot notation
+- No empezar con numeros para las `keys`. sale error al usar 
+dot notation
+- Dentro de las keys si usamos multiples paralabra como "primer nombre" no usar espacios o caracteres especiales, es mejor usar 
+camelCase "primerNombre"
+
+## ES6
+
+### Template literal 
+es una nueva forma de usar strings interpolation o concatenacion
+de strings cambios los `'' or ""` por "``". Ademas que podemos 
+representar expresiones o agregar variablesde la siguiente forma 
+`${expression}`
+
+### Destructing 
+Es una forma mas corta de extraer multiples elememtos de un array 
+o de un objeto 
+
+Antes de ES6 hacemos 
+
+Para arreglos
+```js 
+const point = [10, 25, -34];
+
+const x = point[0];
+const y = point[1];
+const z = point[2];
+
+console.log(x, y, z);
+```
+Para objetos
+```js
+const gemstone = {
+  type: 'quartz',
+  color: 'rose',
+  carat: 21.29
+};
+
+const type = gemstone.type;
+const color = gemstone.color;
+const carat = gemstone.carat;
+
+console.log(type, color, carat);
+```
+
+Despues de ES6
+
+Para arreglos
+
+```js
+const point = [10, 25, -34];
+
+const [x, y, z] = point;
+
+console.log(x, y, z);
+```
+
+:::tip 
+Podemos saltarnos elementos de la siguiente forma 
+`const [x, , z] = point;`
+:::
+
+Para objetos
+
+```js
+const gemstone = {
+  type: 'quartz',
+  color: 'rose',
+  carat: 21.29
+};
+
+const {type, color, carat} = gemstone;
+
+console.log(type, color, carat);
+```
+:::note 
+en objetos agarramos el valor de la clave, si solo queremos un
+elemento hacemos lo siguiente `let {color} = gemstone;`
+:::
+
+### Object Literal Shorthand
+Es una forma mas corta de declarar metodos y parametros en los 
+objetos, es muy util cuando tenemos variables con los nombres 
+de las claves que queremos en nuestros objetos.
+
+Antes de ES6
+```js
+let type = 'quartz';
+let color = 'rose';
+let carat = 21.29;
+
+const gemstone = {
+  type: type,
+  color: color,
+  carat: carat
+};
+
+console.log(gemstone);
+```
+
+Despues de ES6
+```js
+let gemstone = {
+  type,
+  color,
+  carat,
+  calculateWorth() { ... }
+};
+```
+:::note 
+para los metodos tampoco es necesario usar la palabra reservada 
+`function`
+:::
+
+### Iteration 
+Bueno la manera mas comun que teniamos para iterar era usar el for loop, que ya hemos aprendido
+ahora con es6 tenemos una manera mas sencilla de iterar muy parecida a python 
+
+sin es6
+
+```js 
+const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+for(let i = 0; i < digits.length; i++){
+  console.log(digits[i]);
+}
+
+```
+con es6
+```js 
+const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+for (let digit of digits){
+  console.log(digit);
+}
+```
+:::tip 
+Es una buena practica nombrar a los arreglos en plural asi cuando 
+tengamos que recorrerlos y usemos un `bucle for` podemos nombrar la variable 
+como su singular
+`for (const button of buttons) {...}.`
+:::
+
+Ademas que podemos detener el bucle en cualquier momento o si agregamos nuevas funciones 
+al `Array.prototype.decimalfy` no se ve afectado nuestro array.
+
+### Spread Operator
+Es un nuevo operador que viene en es6 y nos permite expandir nuestros objetos iterables 
+
+```js 
+const books = ["Don Quixote", "The Hobbit", "Alice in Wonderland", "Tale of Two Cities"];
+console.log(...books);
+```
+> **Prints:** Don Quixote The Hobbit Alice in Wonderland Tale of Two Cities
+
+Esto podria ser util cuando queremos combinar o concatenar arrays 
+
+sin es6 
+
+```js
+const fruits = ["apples", "bananas", "pears"];
+const vegetables = ["corn", "potatoes", "carrots"];
+const produce = fruits.concat(vegetables);
+console.log(produce);
+```
+
+con es6
+```js 
+const fruits = ["apples", "bananas", "pears"];
+const vegetables = ["corn", "potatoes", "carrots"];
+
+const produce = [...fruits, ...vegetables];
+
+console.log(produce);
+```
+
+### Rest Parameter 
+es usar el spread operator al resves, lo que hago es agrupar los elementos (empaquetarlos)
+
+es muy usado para hacer funciones con multiples parametros.
+
+```js
+function sum(...nums) {
+  let total = 0;  
+  for(const num of nums) {
+    total += num;
+  }
+  return total;
+}
+```
+asi lo compacto y solo tengo un array con todos los parametros que le agregue al momento de
+invocar la funcion
+
