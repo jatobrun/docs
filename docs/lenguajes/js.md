@@ -1189,3 +1189,434 @@ function sum(...nums) {
 asi lo compacto y solo tengo un array con todos los parametros que le agregue al momento de
 invocar la funcion
 
+### Arrow functions 
+Hacen lo mismo que las funciones normales pero cambia su forma 
+de escribirlas veamos un ejemplo 
+
+funcion normnal
+```js
+const upperizedNames = ['Farrin', 'Kagure', 'Asser'].map(function(name) { 
+  return name.toUpperCase();
+});
+```
+arrow function
+
+```js 
+const upperizedNames = ['Farrin', 'Kagure', 'Asser'].map(name => name.toUpperCase());
+```
+
+Podemos usar parentesis antes de la flecha para los argumentos,
+separar varios argumentos o no pasar argumentos. Es mas legible y 
+se entiende mejor 
+
+```js
+// sin parametros necesita parentesis
+const sayHi = () => console.log('Hello Udacity Student!');
+sayHi();
+```
+
+```js 
+// multiples parametros necesita parentesis 
+const orderIceCream = (flavor, cone) => console.log(`Here's your ${flavor} ice cream in a ${cone} cone.`);
+orderIceCream('chocolate', 'waffle');
+```
+
+Aunque las arrow functions presentan muchas ventajas como:
+- son mas faciles de escribir 
+- tienen mejor legibilidad 
+- automaticamente pueden retorna valores si usamos consice body 
+syntax
+
+Tienen una gran desventaja:
+- Tienen un problema con la palabra reservada `this`  
+- Ademas que son solo expresiones y no podemos declararlas para 
+usarlas despues 
+
+#### Concise and block body syntax 
+
+**Concise body syntax**
+- No lleva llaves para agrupar el bloque de codigo 
+- Automaticamente retorna la expresion 
+
+:::note 
+Solo se usa cuando tenemos una linea de codigo
+:::
+
+**Block body syntax**
+- Usa llaves para agrupar el bloque de codigo
+- Necesitamos un return para que la funcion devuelva algo
+:::note
+Se usa cuando tenemos multiples lineas de codigo en nuestra
+funcion 
+:::
+
+### Default function parameters
+Muy parecido a python es una forma de poner valores por defecto 
+a los parametros si ningun argumento es pasado al momento de
+llamar a la funcion 
+
+```js
+function greet(name = 'Student', greeting = 'Welcome') {
+  return `${greeting} ${name}!`;
+}
+
+greet(); // Welcome Student!
+greet('James'); // Welcome James!
+greet('Richard', 'Howdy'); // Howdy Richard!
+```
+
+#### Destructuring 
+
+Podemos crear defaults en los elementos de un objeto o array 
+que queremos hacer destructuring 
+
+**Arrays**
+```js
+function createGrid([width = 5, height = 5]) {
+  return `Generates a ${width} x ${height} grid`;
+}
+
+createGrid([]); // Generates a 5 x 5 grid
+createGrid([2]); // Generates a 2 x 5 grid
+createGrid([2, 3]); // Generates a 2 x 3 grid
+createGrid([undefined, 3]);
+```
+ahora el problema con hacer esto es que estamos diciendo 
+que un array debe ser pasado aunque este vacio, por ende 
+si ejecutamos el siguiente codigo saldra error 
+
+```js
+createGrid(); // throws an error
+```
+Para poder arreglar esto podemos usar de nuevo defaults y decir 
+que el parametro por default le viene un array vacio y al hacer
+destructuring tenemos que los dos elementos del array toman el 
+valor de 5 
+
+```js
+function createGrid([width = 5, height = 5] = []) {
+  return `Generates a ${width} x ${height} grid`;
+}
+```
+
+**Objetos**
+
+De la misma manera podemos hacer algo similar con los objetos 
+
+```js 
+function createSundae({scoops = 1, toppings = ['Hot Fudge']}) {
+  const scoopText = scoops === 1 ? 'scoop' : 'scoops';
+  return `Your sundae has ${scoops} ${scoopText} with ${toppings.join(' and ')} toppings.`;
+}
+
+createSundae({}); // Your sundae has 1 scoop with Hot Fudge toppings.
+createSundae({scoops: 2}); // Your sundae has 2 scoops with Hot Fudge toppings.
+createSundae({scoops: 2, toppings: ['Sprinkles']}); // Your sundae has 2 scoops with Sprinkles toppings.
+createSundae({toppings: ['Cookie Dough']});
+```
+
+y obviamente este tiene el mismo error que el codigo anterior 
+espera un objeto vacio y sino le paso un objeto me dara error 
+porque no puede hacer destructuring a `undefined`
+
+```js 
+function createSundae({scoops = 1, toppings = ['Hot Fudge']} = {}) {
+  const scoopText = scoops === 1 ? 'scoop' : 'scoops';
+  return `Your sundae has ${scoops} ${scoopText} with ${toppings.join(' and ')} toppings.`;
+}
+```
+asi lo arreglamos y con eso ya podemos ejecutar esto 
+
+```js 
+createSundae(); // Your sundae has 1 scoop with Hot Fudge toppings.
+```
+
+Una ventaja que tienes los objetos sobre los arrays es que 
+como los arrays son posicional no puedes solo pasar un argumento
+y que sea el segundo sino que deberias hacer lo siguiente
+
+```js 
+createSundae([undefined, ['Hot Fudge', 'Sprinkles', 'Caramel']]);
+```
+los parametros que quisieras skipear le pones `undefined`
+
+### Classes
+Practicamente son funciones con herencia donde todo sucede por 
+debajo y no tenemos que preocuparnos por hacer el `prototype`
+
+Antes de es6
+
+```js 
+function Plane(numEngines) {
+  this.numEngines = numEngines;
+  this.enginesActive = false;
+}
+
+// methods "inherited" by all instances
+Plane.prototype.startEngines = function () {
+  console.log('starting engines...');
+  this.enginesActive = true;
+};
+
+var richardsPlane = new Plane(1);
+richardsPlane.startEngines();
+
+var jamesPlane = new Plane(4);
+jamesPlane.startEngines();
+```
+
+despues del es6
+
+```js 
+class Plane {
+  constructor(numEngines) {
+    this.numEngines = numEngines;
+    this.enginesActive = false;
+  }
+
+  startEngines() {
+    console.log('starting engines…');
+    this.enginesActive = true;
+  }
+}
+```
+Ambos funcionan igual, es decir, la palabra reservada `class`
+es solo una funcion fancy.
+
+:::caution 
+Para separar metodos dentro de las clases no usamos commas,
+si ponemos una coma para separar metodos nos dara un error
+:::
+
+#### Static methods
+Podemos tener metodos que se pueden ejecutar desde la clase como
+tal y no ncesitamos tener una instancia. Esto se lo conoce como 
+metodos estaticos 
+
+```js 
+class Plane {
+  constructor(numEngines) {
+    this.numEngines = numEngines;
+    this.enginesActive = false;
+  }
+
+  static badWeather(planes) {
+    for (plane of planes) {
+      plane.enginesActive = false;
+    }
+  }
+
+  startEngines() {
+    console.log('starting engines…');
+    this.enginesActive = true;
+  }
+}
+```
+
+Para poder usarlo hacemos lo siguiente 
+
+```js 
+Plane.badWeather([plane1, plane2, plane3]);
+```
+
+#### Beneficios de las clases
+
+- Menos setup 
+- Tenemos un constructor 
+- Todo esta centralizado
+
+#### Cosas a tener en cuenta con las clases 
+
+- Solo son funciones con prototypal inheritance 
+- Debemos usar `new` cada que creemos una nueva instancia 
+- las clases en js no son magicas
+
+### Symbols
+es un tipo de dato **primitivo** que es unico e inmutable, normalmente 
+lo usamos para definir propiedades de objetos
+
+asi creamos un symbol
+```js 
+const sym1 = Symbol('apple');
+console.log(sym1);
+```
+Si tenemos el siguiente objeto 
+
+```js 
+const bowl = {
+  'apple': { color: 'red', weight: 136.078 },
+  'banana': { color: 'yellow', weight: 183.15 },
+  'orange': { color: 'orange', weight: 170.097 }
+};
+```
+y hacemos lo siguiente 
+
+```js 
+const bowl = {
+  'apple': { color: 'red', weight: 136.078 },
+  'banana': { color: 'yellow', weight: 183.151 },
+  'orange': { color: 'orange', weight: 170.097 },
+  'banana': { color: 'yellow', weight: 176.845 }
+};
+```
+esto nos dara un problema porque se esta sobrescribiendo 
+la propiedad banana
+
+la forma de arreglarlo es con `symbols`
+
+```js 
+const bowl = {
+  [Symbol('apple')]: { color: 'red', weight: 136.078 },
+  [Symbol('banana')]: { color: 'yellow', weight: 183.15 },
+  [Symbol('orange')]: { color: 'orange', weight: 170.097 },
+  [Symbol('banana')]: { color: 'yellow', weight: 176.845 }
+};
+``` 
+de la siguiente forma no tendriamos problema de sobreescritura
+
+### Iterable and Iteration
+
+**Iterable Protocol**
+
+Es el protocolo que nos permite especificar 
+una forma de iterar a travez de los valores del objeto. Pa
+
+Ademas para que un objeto sea considerado iterable debe 
+implementar la interfaz iterator. Esto quiere decir que el 
+objeto debe contener un metodo iterador predeterminado, el cual
+definira como se debe iterar dicho objeto
+
+Iterator Protocol
+
+define una forma en la que el objeto produce la secuencia de 
+valores. Esto lo hacemos implementando el metodo .next()
+
+El metodo .next() tiene dos propiedades:
+
+1. `value`: el valor del siguiente elemento
+2. `done`: si es true representa que llegamos al final de la 
+secuencia si es false todavia no.
+
+### Sets 
+basicamente es un tipo de array que solo tiene elementos unicos
+no puede tener elementos repetidos, no tienen index y no puedo 
+acceder a los elementos de forma individual
+
+Podemos crear sets de la siguiente manera 
+
+Set vacio 
+```js
+const games = new Set();
+console.log(games);
+```
+
+Set creado a partir de un array 
+
+```js 
+const games = new Set(['Super Mario Bros.', 'Banjo-Kazooie', 'Mario Kart', 'Super Mario Bros.']);
+console.log(games);
+```
+
+Para modificarlos podemos usar el metodo `.add()` o el metodo 
+`.delete()`
+
+Para borrar todos los elementos de un set podemos usar el metodo
+`.clear()`
+
+Si tratas de agregar un elemento duplicado en el set te dara un 
+error y no pasara nada, ahora si tratas de borrar un elemento
+que no existe te dara un error y no pasa nada 
+
+`.add()` retorna set si se agrego correctamente el elemento
+
+`.delete()` retorna un bool
+
+`.size` retorna el numero de elemento en el set 
+
+`.has()` retorna true si el elemento existe en el set 
+
+`.values()` retorna los elementos del set como un `SetIterator`
+con el que podemos usar el metodo `.next()` para ir consiguiendo
+cada uno de los elementos del set
+
+Tambien podemos usar el `for....of` para recorrerlo.
+
+
+### Weak set 
+es un set normal pero con algunas diferencias:
+1. solo tiene objetos 
+2. no es iterable 
+3. no tiene el metodo `.clear()`
+
+```js
+
+let student1 = { name: 'James', age: 26, gender: 'male' };
+let student2 = { name: 'Julia', age: 27, gender: 'female' };
+let student3 = { name: 'Richard', age: 31, gender: 'male' };
+
+const roster = new WeakSet([student1, student2, student3]);
+console.log(roster);
+```
+:::caution
+Tendremos un error si tratamos de agregar cualquier cosa al 
+weakset que no sea un objeto
+:::
+
+#### Garbage collector
+Cuando una variable es declarada se ocupa un espacio en memoria 
+reservado para dicha variable y este se elimina cuando la variable
+se deja de usar. El proceso de buscar dichas variables para 
+liberar memoria se lo conoce como el garbage collector 
+
+Los weakset hacen un buen uso de esto porque si uno de los objetos
+que agregamos al weakset lo hacemos null es decir lo eliminamos 
+automaticamente el weakset libera la memoria de dicho elemento.
+
+### Maps
+son parecidos a los set pero con los objetos. 
+
+tenemos el metodo `.set()` y el metodo `.delete()`
+
+```js
+const employees = new Map();
+
+employees.set('james.parkes@udacity.com', { 
+    firstName: 'James',
+    lastName: 'Parkes',
+    role: 'Content Developer' 
+});
+employees.set('julia@udacity.com', {
+    firstName: 'Julia',
+    lastName: 'Van Cleve',
+    role: 'Content Developer'
+});
+employees.set('richard@udacity.com', {
+    firstName: 'Richard',
+    lastName: 'Kalehoff',
+    role: 'Content Developer'
+});
+
+console.log(employees);
+```
+
+
+```js 
+employees.delete('julia@udacity.com');
+employees.delete('richard@udacity.com');
+console.log(employees);
+```
+
+Tambien podemos usar `.has()` para ver si un elemento existe 
+
+```js 
+const members = new Map();
+
+members.set('Evelyn', 75.68);
+members.set('Liam', 20.16);
+members.set('Sophia', 0);
+members.set('Marcus', 10.25);
+
+console.log(members.has('Xavier')); // false
+console.log(members.has('Marcus')); // true
+```
+
