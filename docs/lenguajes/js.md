@@ -1620,3 +1620,236 @@ console.log(members.has('Xavier')); // false
 console.log(members.has('Marcus')); // true
 ```
 
+
+Podemos obtener los elementos de un map con el metodo `.get()`
+
+```js 
+console.log(members.get('Evelyn'));
+```
+
+Para poder iterar un map tenemos las siguientes formas:
+
+1. usando el iterador por default 
+2. usando `for...of` 
+3. usando el metodo `.forEach()`
+
+### Weak Maps 
+
+Los weak maps son como los maps con 3 diferencias:
+
+1. solo puede tener objetos como claves
+2. no es iterable por ende no podemos crear bucles
+3. no tenemos el metodo `.clear()`
+
+
+Para crear un weak map hacemos lo siguiente 
+
+```js
+const book1 = { title: 'Pride and Prejudice', author: 'Jane Austen' };
+const book2 = { title: 'The Catcher in the Rye', author: 'J.D. Salinger' };
+const book3 = { title: 'Gulliver’s Travels', author: 'Jonathan Swift' };
+
+const library = new WeakMap();
+library.set(book1, true);
+library.set(book2, false);
+library.set(book3, true);
+
+console.log(library);
+```
+
+Ahora si tratamos de agregar cualquier cosa que no sea un objeto 
+como clave nos da el siguiente error 
+
+```js 
+library.set('The Grapes of Wrath', false);
+```
+
+```
+Uncaught TypeError: Invalid value used as weak map key(…)
+```
+
+### Promesas 
+Una promesa es una forma de manejar las peticiones asincronas
+en js. De modo que mientras pedimos algo o hacemos alguna
+solicitud que demanda tiempo mientras esperamos podemos estar
+haciendo otras actividades.
+
+para poder crear un promesa hacemos lo siguiente 
+
+```js 
+
+new Promise(function (resolve, reject) {
+    window.setTimeout(function createSundae(flavor = 'chocolate') {
+        const sundae = {};
+        // request ice cream
+        // get cone
+        // warm up ice cream scoop
+        // scoop generous portion into cone!
+        resolve(sundae);
+    }, Math.random() * 2000);
+});
+
+```
+las promesas tienen dos argumentos `resolve` y `reject`
+estos los usamos para definir el comportamiento cuando algo 
+funciona correctamente o fracasa
+
+
+### Proxies
+
+Es como la secretaria de los objetos, es decir, que es la primera
+entidad que interactua con otras entidades.
+
+```js 
+var richard = {status: 'looking for work'};
+var agent = new Proxy(richard, {});
+
+agent.status; // returns 'looking for work'
+```
+de esta manera podemos crear un secretaria de objetos 
+
+Podemos manejar interceptores de funciones para realizar acciones 
+por ejemplo al tratar de obtener una propiedad ademas podemos
+hacer un console.log o realizar algun cambio. Otra cosa que
+podemos hacer es que al momento de cambiar un valor se actualice 
+de una cierta forma, etc. 
+
+```js
+const richard = {status: 'looking for work'};
+const handler = {
+    get(target, propName) {
+        console.log(target); // the `richard` object, not `handler` and not `agent`
+        console.log(propName); // the name of the property the proxy (`agent` in this case) is checking
+    }
+};
+const agent = new Proxy(richard, handler);
+agent.status;
+```
+
+con ese codigo cada que queremos el valor de una variable se 
+imprime todo el objeto y la propiedad que buscamos 
+
+Ahora si queremos manejar eventos cuando actualizamos valores 
+usamos el `set trap`
+
+```js
+const richard = {status: 'looking for work'};
+const handler = {
+    set(target, propName, value) {
+        if (propName === 'payRate') { // if the pay is being set, take 15% as commission
+            value = value * 0.85;
+        }
+        target[propName] = value;
+    }
+};
+const agent = new Proxy(richard, handler);
+agent.payRate = 1000; // set the actor's pay to $1,000
+agent.payRate;
+```
+
+Con los proxies tenemos 13 diferentes traps que podemos usar 
+para cambiar el comportamiento de nuestros objetos o agregarle 
+funcionalidades.
+
+1. the get trap - lets the proxy handle calls to property access
+2. the set trap - lets the proxy handle setting the property to a new value
+3. the apply trap - lets the proxy handle being invoked (the object being proxied is a function)
+4. the has trap - lets the proxy handle the using in operator
+5. the deleteProperty trap - lets the proxy handle if a property is deleted
+6. the ownKeys trap - lets the proxy handle when all keys are requested
+7. the construct trap - lets the proxy handle when the proxy is used with the new keyword as a constructor
+8. the defineProperty trap - lets the proxy handle when defineProperty is used to create a new property on the object
+9. the getOwnPropertyDescriptor trap - lets the proxy handle getting the property's descriptors
+10. the preventExtenions trap - lets the proxy handle calls to Object.preventExtensions() on the proxy object
+11. the isExtensible trap - lets the proxy handle calls to Object.isExtensible on the proxy object
+12. the getPrototypeOf trap - lets the proxy handle calls to Object.getPrototypeOf on the proxy object
+13. the setPrototypeOf trap - lets the proxy handle calls to Object.setPrototypeOf on the proxy object
+
+:::tip 
+Con los getters y setter tambien podemos hacer lo mismo que con 
+el trap de get y el trap de set. La diferencia principal esta
+en conocer las propiedades. Con los proxies no es necesario que conozcamos las propiedades primero para declarar dichos getters 
+y setters
+
+:::
+
+### Generators 
+son basicamente funciones que podemos pausar. Esto en algunos 
+casos es util porque normalmente js funciona con la forma 
+`run-to-completion` esto quiere decir que empieza ejecutando 
+la primera linea de codigo y sigue asi hasta llegar al final 
+sin poder pausar en el medio o en cualqueir parte del codigo.
+
+Para declarar un generator basta con agregar un asterisco 
+entre la palabra reservada `functions` y el nombre de la funcion.
+
+```js
+function* getEmployee() {
+    console.log('the function has started');
+
+    const names = ['Amanda', 'Diego', 'Farrin', 'James', 'Kagure', 'Kavita', 'Orit', 'Richard'];
+
+    for (const name of names) {
+        console.log( name );
+    }
+
+    console.log('the function has ended');
+}
+```
+
+esto nos devuelve un iterador y con el metodo `.next()` podemos 
+avanzar entre los diferentes `yields` del generador.
+
+```js
+function* getEmployee() {
+    console.log('the function has started');
+
+    const names = ['Amanda', 'Diego', 'Farrin', 'James', 'Kagure', 'Kavita', 'Orit', 'Richard'];
+
+    for (const name of names) {
+        yield name;
+    }
+
+    console.log('the function has ended');
+}
+```
+
+```js 
+const generatorIterator = getEmployee();
+let result = generatorIterator.next();
+result.value // is "Amanda"
+
+generatorIterator.next().value // is "Diego"
+generatorIterator.next().value // is "Farrin"
+```
+:::note
+Siempre vas a necesitaras ejecturar la function `.next`
+n + 1 veces el yield este en la funcion. 
+:::
+
+### Pollyfills 
+
+Es una forma de implementar funcionalidades con codigo nativo 
+de js en navegadores que aun no tienen las versiones actualizada
+de dichas funcionalidades nuevas.
+
+#### Compilers
+UN compilador cambia el nivel del abstraccion del lenguaje es 
+decir que si tenemos codigo escrito que entendemos los humanos 
+dicho coddigo es transformado a lenguaje de maquina 
+
+#### Transpilers 
+Por otro lado los transpiladores solo cambian el lenguaje humano 
+por otro lenguaje que entendiendan los humanos, es decir, si 
+queremos cambiar de java a python necesitamos un transpilador 
+que haga ese trabajo por nosotros y esto es util porque si usamos
+ES6 podemos usar un transpilador que cambie el lenguaje a ES5 que
+es el lenguaje que todos los navegadores entienden.
+
+Uno de los transpiladores mas usados en js es babel, con el no
+solo podemos transpilar codigo de ES6 a ES5 sino tambien JSX a JS
+etc. 
+
+
+
+
