@@ -684,3 +684,252 @@ Tenemos tareas repetitivas como hacer un backeup o truncar data diaria
 
 :::
 
+## Data Sources 
+
+Es una forma que tiene terraform en conseguir informacion que este fuera de terraform 
+o de la computadora local 
+
+```terraform 
+data "aws_ami" "example" {
+  most_recent = true
+
+  owners = ["self"]
+  tags = {
+    Name   = "app-server"
+    Tested = "true"
+  }
+}
+```
+
+de esta manera podemos ir a aws y buscar dicha especificacion y una vez la obtengamos 
+podemos usar dichos id para referenciar otros servicios de la siguiente manera
+
+```terraform 
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.web.id
+  instance_type = "t1.micro"
+}
+```
+
+## Resources Meta Arguments 
+
+Podemos usar estos argumentos en cualquier recurso con el fin de cambiar 
+su comportamiento los mas comunes son:
+
+### Depends on 
+con este argumento declaramos dependencia explicita entre recursos, es decir, 
+el uno necesita que el otro este ready para poder provisionarlo. 
+
+terraform hace esto de manera implicita pero hay momentos en lo ques la inferencia de 
+terraform no es suficiente y necesitamos ser mas explicito al momento de provisionar 
+recursos 
+
+ejemplo 
+
+```terraform 
+
+resource "aws_iam_role_policy" "example" {
+  name   = "example"
+  role   = aws_iam_role.example.name
+  policy = jsonencode({
+    "Statement" = [{
+      "Action" = "s3:*",
+      "Effect" = "Allow",
+    }],
+  })
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-a1b2c3d4"
+  instance_type = "t2.micro"
+
+  # Terraform can infer from this that the instance profile must
+  # be created before the EC2 instance.
+  iam_instance_profile = aws_iam_instance_profile.example
+
+  # However, if software running in this EC2 instance needs access
+  # to the S3 API in order to boot properly, there is also a "hidden"
+  # dependency on the aws_iam_role_policy that Terraform cannot
+  # automatically infer, so it must be declared explicitly:
+  depends_on = [
+    aws_iam_role_policy.example,
+  ]
+}
+
+```
+
+### count
+para crear multiples replicas de un recursos basado en un valor 
+
+```terraform 
+resource "aws_instance" "server" {
+  count = 4 # create four similar EC2 instances
+
+  ami           = "ami-a1b2c3d4"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "Server ${count.index}"
+  }
+}
+
+```
+
+Tambien podemos usar expresiones numericas 
+
+```terraform 
+resource "aws_instance" "server" {
+  # ...
+  count = length(var.subnet_ids)
+  # ...
+}
+```
+
+### for_each 
+para crear multiples replicas acorde a un map o set, esto nos ayuda a crear 
+recursos de una forma mas dinamica 
+
+```terraform
+resource "azurerm_resource_group" "rg" {
+  for_each = {
+    a_group = "eastus"
+    another_group = "westus2"
+  }
+  name     = each.key
+  location = each.value
+}
+
+```
+Si queremos hacer lo mismo con un set 
+
+```terraform 
+resource "aws_iam_user" "the-accounts" {
+  for_each = toset( ["Todd", "James", "Alice", "Dottie"] )
+  name     = each.key
+}
+
+```
+:::note 
+el each.value en los set seria `null` 
+:::
+ 
+### provider
+para seleccionar otro proveedor con esto podemos hacer diferentes despliegues en 
+multiples zonas o multiples nubes 
+
+```terraform 
+# The default provider configuration; resources that begin with `aws_` will use
+# it as the default, and it can be referenced as `aws`.
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Additional provider configuration for west coast region; resources can
+# reference this as `aws.west`.
+provider "aws" {
+  alias  = "west"
+  region = "us-west-2"
+}
+
+```
+
+ahora para usarlo en un recurso hacemos lo siguiente 
+
+```terraform 
+resource "aws_instance" "foo" {
+  provider = aws.west
+
+  # ...
+}
+
+
+```
+
+### lifecycle
+
+para crear ciclos de vida custom y cambiar el comportamiento de los recursos 
+
+#### Resources Behaviour
+
+Hay 3 comportamientos o estados basicos en los recursos 
+- `create` es cuando el recurso se encuentra definido en la configuracion pero 
+no existe infraestructura fisica atada a el. Asociado con un (+)
+
+- `destroy` es cuando el recurso existe en el estado pero no en la configuracion. 
+Asociado con un (-)
+
+- `update-in-place` es cuando los argumentos del recurso han sufrido modificaciones.
+Asociado con un (~)
+
+- `destroy and recreate` es cuando no podemos hacer una actualizacion del recursos 
+por limitaciones del api. Asociado con un (-/+)
+ 
+#### Lifecycle blocks 
+
+```terraform 
+resource "azurerm_resource_group" "example" {
+  # ...
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+```
+tiene varios argumentos los cuales son:
+
+- create_before_destroy (bool): 
+
+- prevent_destroy (bool):
+
+- ignore_changes (list of attributes): 
+
+### Provisioners
+para hacer funciones extras luego de crear el recurso 
+
+
+## terraform expresions 
+Las expresiones nos ayudan a realizar calculo de valores sin configuraciones
+previas.
+
+### Types and values 
+
+El resultado de una expresion es un valor y por ende tiene un tipo de dato 
+
+existen 3 grupos de tipos de datos:
+
+- Primitives
+1. string: son palabras o frases dentro de comillas dobles
+2. number: pueden ser enteros o decimales
+3. boolean: valores de verdad (True or False)
+
+- No type 
+1. null: la ausencia de valor, por ende vendria a ser el valor por default de cada 
+proveedor y se usa la palabra reservada `null`
+
+- complex/structural
+1. list 
+2. maps
+3. objects
+4. sets 
+5. tuples
+
+
+### String and templates 
+
+### Reference to value 
+
+### Operators 
+
+### Functions calls 
+
+### Conditional expressions 
+
+### For expressions
+
+### Splat expressions 
+
+### Dynamic blocks 
+
+### Type constraints 
+
+### Version constraints
