@@ -903,7 +903,7 @@ existen 3 grupos de tipos de datos:
 3. boolean: valores de verdad (True or False)
 
 - No type 
-1. null: la ausencia de valor, por ende vendria a ser el valor por default de cada 
+1. null: no significa la ausencia de valor, por ende vendria a ser el valor por default de cada 
 proveedor y se usa la palabra reservada `null`
 
 - complex/structural
@@ -913,23 +913,209 @@ proveedor y se usa la palabra reservada `null`
 4. sets 
 5. tuples
 
-
 ### String and templates 
+Por el momento terraform solo soporta comilla doble no comilla 
+simple esto es bueno porque podemos tener caracteres de escape 
+como por ejemplo:
 
-### Reference to value 
+- `\n` Salto de lionea
+- `\t` Tab
+- `\r` Enter
+- `\\` Backslash
+Podemos tener un string de multiples lineas para esto terraform 
+maneja el `heredoc` style que es propio de los sistemas unix
 
+```
+<<EOT
+hello
+world 
+EOT
+```
+
+Siempre empezaremos con `<<` seguido de cualquier palabra en 
+mayusculas y cerramos el tag con la misma palabra en mayusculas
+dentro de dicho tag todo lo que este sera considerado un string 
+
+#### String Interpolation 
+Es la habilidad de evaluar una expresion entre llaves `${...}`
+y convertirlo en un string 
+
+Ejemplo:
+```
+"Hola, ${var.name}!"
+```
+#### String directive
+Permite evaluar condiciones logicas entre llaves `%{...}`, para
+esto podemos usar interpolation de strings o HEREDOC. Con esto 
+podemos usar `for loops` o `if else`
+
+Ejemplo:
+```
+<<EOT
+%{ for ip in aws_instance.example.*.private_ip }
+server ${ip}
+%{ endfor }
+EOT
+```
 ### Operators 
+Al igual que cualquier lenguaje de programacion tenemos operadores
+estos pueden ser aritmetico o logicos 
 
-### Functions calls 
+Aritmeticos:
+- multiplicacion `a*b`
+- division `a/b`
+- suma `a + b`
+- resta `a - b`
+- residuo `a % b`
+
+Condicionales:
+- Igual `a==b`
+- diferente `a!=b`
+- menor `a<b`
+- menor igual `a<=b`
+- mayor `a>b`
+- mayor igual `a>=b`
+
+Logicos:
+- Or `a||b`
+- and `a&&b`
+- not `!a`
+
 
 ### Conditional expressions 
+Usamos el operador ternario `?` para hacer `if else`
+```
+condicion ? valor true : valor false
+```
 
+Ejemplo 
+
+```hcl
+var.a != "" ? var.a : "default-a"
+```
+:::caution
+Los valores que se retornan deben ser del mismo tipo, no puedo
+retornar en el valor true un numero y en el falso un string
+
+:::
 ### For expressions
+Nos ayuda a iterar un tipo de dato complejo y aplicarle transformaciones. 
+Podemos recibir `listas, set, tuples, maps, objects`
+
+Si tenemos `[]` regresaremos una tupla 
+Si tenemos `{}` regresaremos un objeto
+
+Para listas o sets 
+
+```hcl
+[for s in var.list : upper(s)] ---> ["HELLO", "WORLD"]
+```
+```hcl 
+{for s in var.list : upper(s)} ---> {hello = "HELLO", world ="WORLD"}
+```
+
+Para map u objetos
+
+```hcl 
+[for k, v in var.map : length(k) + length(v)]
+```
+
+:::tip 
+En las listas tambien podemos obtener el indice del elemento algo 
+similar a usar el metodo enumerate de python 
+
+```hcl 
+[for i, e in var.list : "${i}, ${e}" ]
+```
+Tambien podemos reducir la cantidad de elementos que retornamos en el for 
+usando un `if else`
+
+```hcl
+[for e in var.list : upper(e) if e != ""]
+```
+:::
 
 ### Splat expressions 
+Es una forma corta de usar un bucle for. Esto lo hacemos usando el 
+splat operator `*`
+
+```hcl
+[for o in var.list : o.id] -> var.list[*].id
+[for o in var.list : o.interface[0].name -> var.list[*].interface[0].name]
+```
 
 ### Dynamic blocks 
+Nos ayuda a construir bloques de codigo anidados que se repetiran a lo
+largo de nuestro codigo de terraform, debemos usar la palabra reservada 
+`dynamics` y actuara como un bucle for
 
-### Type constraints 
+```hcl 
+resource "aws_elastic_beanstalk_environment" "tfenvtest" {
+  name                = "tf-test-name"
+  application         = "${aws_elastic_beanstalk_application.tftest.name}"
+  solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.4 running Go 1.12.6"
 
+  dynamic "setting" {
+    for_each = var.settings
+    content {
+      namespace = setting.value["namespace"]
+      name = setting.value["name"]
+      value = setting.value["value"]
+    }
+  }
+}
+
+```
 ### Version constraints
+
+
+## Terraform state
+
+Que es un estado ?
+
+Un estado es una condicion particular en el que estan los recursos en la nube 
+en un periodo de tiempo
+
+Como terraform preserva el estado?
+
+Cuando provisonamos recursos en la nube, terraform crea un archivo de estado 
+llamado `terraform.tfstate`, este archivo es un json y contiene un mapeo 1 a 1
+de los recursos de instancia con los recursos en la nube 
+
+### Comandos 
+
+- `terraform state list`: lista los resources en el state
+- `terraform state mv`: Mueve o cambia de nombre un elemento del estado 
+- `terraform state pull`: Se baja el remote state y lo imprime en consola 
+- `terraform state push`: actualiza el remote state con el local state 
+- `terraform state replace-provider`: Cambia el provider del state
+- `terraform state rm`: elimina recursos del state
+- `terraform state show`: Muestra un recurso del state
+
+### terraform state mv
+Si solo le cambiamos el nombre a un recurso o lo movemos a un modulo
+al aplicar terraform apply. terraform destruira el recurso y lo generara de nuevo 
+sino queremos que esto pase podemos usar terraform state mv para renombrar 
+el recurso sin la accion de borrarlo y recrearlo.
+
+Para renombrar 
+
+```bash 
+terraform state mv packet_device.worker packer_devices.helper
+```
+Para mover un recurso a un modulo 
+
+```bash
+terraform state mv packet_device.worker module.worker.packet_devices.worker
+```
+
+Para mover un modulo dentro de un modulo
+
+```bash 
+terraform state mv module.app module.parent.module.app
+```
+
+### terraform state backups
+Todos los subcomandos de terraform state que modifican el estado 
+crearan un archivo backup. `list y show` como solo leen no crean un backup
+este archivo se llamada `terraform.tfstate.backup`
