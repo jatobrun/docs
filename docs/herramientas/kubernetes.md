@@ -703,13 +703,20 @@ spec:
         memory: "128Mi"
         cpu: "500m"
 ```
-### Readiness Probe
-es una forma de explicarle a kubernetes que el pod esta listo para recibir trafico. 
+### Probes 
+Los probes nos ayudan para detectar el estado del contenedor existe 3 tipos de probes 
+- readiness probe
+- liveness probe
+- startup probe
+#### Readiness Probe
+es una forma de explicarle a kubernetes que el pod esta listo **para recibir trafico**. 
 
 Lo que hace kubernetes es hacer un get a la ruta designada y esperar un 200. En caso
 de norecibir un 200 el pod no se encuentra Ready.
 
-### Liveness Probe
+#### Liveness Probe
+Le dice cuando reiniciar un contenedor.
+
 es una forma de explicarle a kubernetes que el pod esta vivo, es decir, que no 
 quiero que lo mate o haga un restart.
 
@@ -754,8 +761,8 @@ livenessProbe:
       periodSeconds: 20
 ```
 
-### Startup Probe
-es una forma de saber cuando el contenedor inicio, esto desabilita al `readiness probe` y
+#### Startup Probe
+es una forma de saber cuando el contenedor ya inicio, esto desabilita al `readiness probe` y
 `livenes probe` para que no interfieran con el inicio del contenedor. Esto suele usarse en 
 contenedores lentos o aplicaciones de legado.
 
