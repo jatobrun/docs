@@ -31,6 +31,79 @@ para saber como instalar `minikube` podemos usar el siguiente
 Necesitaremos conectar `kubectl` a dicho cluster por medio de un archivo de configuracion llamado
 `kube.config`
 
+### Kubernetes Dashboard
+Es una forma de poder manejar tu cluster por medio de una ui. Para mas [informacion](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
+
+## Overview
+- Clusters: una agrupacion logica de todos los recursos 
+
+- Namespace: una agrupacion logica por nombre de los recursos que hay en un cluster.
+Normalmente se usa para aislar diferentes workloads dentro del cluster 
+
+- Node: La maquina virtual donde se ejecutan los pods. Existen 2 tipos de nodos 
+`worker nodes` y `control nodes` los primeros es donde las aplicaciones corren mientras que 
+el segundo maneja los `worker nodes`
+
+- Pod: es la unidad mas pequeña en k8s. Es la forma de abstraer un contenedor 
+
+- Services: Es una ip estatica o un dns para un grupo de pods (la ip persiste incluso si el pod muere)
+
+- Ingress: Traduce reglas http/s que apuntan servicios 
+
+- Api Server: Es columna de las comunicaciones en kubernetes
+
+- Kubelet: Permite comunicarnos con los nodos desde kubectl 
+
+- Kubectl: El CLI que ayuda a los usuarios a interactuar con el cluster y sus servicios atraves 
+del api server
+
+- Cloud controller manager: Habilita el link con CSP (Aws, azure, gcp)
+
+- Controller manager: Es el cerebro de kubernetes
+
+- Scheduler: Sabe donde ubicar los pods y los ubica en una cola
+
+- Etcd: almacena el estado del cluster como una base de datos o un .tfstate file
+
+- Kube Proxy: Se encarga de todo el networking dentro de los pods (routing and filtering) rules
+
+- Network policies: Es un firewall virtual que restringe la comunicacion 
+
+- Config maps: Tener configuraciones especificas como un mini data store 
+
+- Secrets: es un configmap pero encriptada 
+
+- volumes: son los discos duros 
+
+- Statefullset: Indica la existencia unica de cada pod
+
+- replicaset: Mantiene la cantidad de pods que se solicita
+
+- Deployment: es un template de lo que se quiere deployar.
+
+## Nodes 
+### Control plane node (Master node)
+Realizan tareas como programar, reiniciar nodos, control, etc.
+
+Los principales elementos dentro de este tipo de nodos son:
+1. Api server 
+2. Scheduler 
+3. Control manager 
+4. Etcd
+5. kubelet
+
+:::tip 
+Esto normalmente esta dentro del namespace `kubesystem`
+:::
+
+### Worker nodes
+Se encarga de ejecutar las apps y tenemos los siguientes elemento dentro de estos: 
+1. Api server
+2. kubelet
+3. Kube Proxy 
+4. Container runtime
+5. iptables
+6. pods and containers
 
 ## Contextos
 Los contextos son la combinacion entre usuarios y cluster. Dice que usuario usa que cluster.
@@ -142,6 +215,47 @@ kubectl config view --minify \
 Kubernetes tiene la opcion de usar abreviaciones podemos verlas 
 [aqui](https://blog.heptio.com/kubectl-resource-short-names-heptioprotip-c8eff9fb7202).
 
+## In-Tree vs out-of-Tree
+- In-Tree 
+Son los plugins que ya vienen por default dentro del proyecto o que estan en el mismo 
+directorio 
+- Out-of-tree
+Son los plugins que de forma manual debemos instalar para extender las capacidades 
+de la herramienta que estamos usando 
+
+## Endpoints and Endpoints - slices
+Trackean la ip de los pods asignados a un services de kubernetes
+Cuando un selector de un servicio hace match con una label de un pod la ip del pod 
+entra al pool de endopints con el fin de que el servicio sepa a cuales direciones ip debe mandar 
+el trafico. Recordemos que esto es asi porque los pods mueren constantemente entonces sus ips 
+cambian los servicios por otro lado son estaticos y para mapear la ip de los pods existe esta pool 
+de endpoints. Por ende los pods se exponen publicamente hacia los servicios usando los endpoints.
+
+```bash
+kubectl get endpoints # obtenemos la lista de endpoints
+```
+
+Por otro lado los `endpoints slices` son segmentos que manejan hasta un limite de 100 pods.
+
+## Jobs 
+UN background job es una forma de ejecutar una tarea que realiza una tarea en especifico se usa 
+bastante cuando queremos hacer backups a las bases de datos.
+
+En kubernetes tenemos algo similar los `cronjobs` y los `jobs`
+
+Los `jobs` es un grupo de pods que ejecutaran una accion de manera indefinida hasta que la accion 
+se termine 
+
+```bash 
+kubectl create job hello --image busy-box -- echo "hello world"
+```
+los `cronjobs` usan cron expresions para definir el tiempo. Y son basicamente jobs pero que se 
+disparan con eventos de tiempo, es decir, cada 5 segundos o cada 1 dia.
+
+```bash 
+kubectl create job hello --image busy-box --schedule "*/1 * * * *" -- echo "Hello world"
+```
+
 ## Namespace
 Es una division logica de tu cluster de kubernetes, permite separar la carga del cluster.
 
@@ -152,6 +266,219 @@ Por default los datos dentro de los ns si se pueden ver entre ellos
 ```bash
 kubectl get ns
 ```
+Kubernetes empieza con 4 namespaces:
+
+1. `default` aqui se agregan todos los pods a los que no le agregamos namespace
+2. `kube-public` para recursos que queremos que sean publicos 
+3. `kube-system` almacena todos los pods creados por el systema de kubernetes 
+4. `kube-node-lease` Se usa para detectar fallas en los nodos como (un healthcheck para nodos)
+
+- El nombre de los pods dentro del namespace debe ser unico pero fuera de el puede repetirse
+- Podemos aplicar una restricion de quota por namespace para tener un control de la memoria o cpu 
+que usan los pods dentro de ese namespace
+### Scoping 
+Dentro de kubernetes existe algo parecido a los lenguajes de programacion como es el scope
+
+tenemos 3 tipos de scope:
+
+1. Single namespace object: Solo pueden existir dentro del namespace (secrets and configmaps)
+2. Multi namespace object: Pueden existir entre varios namespace (pods and service)
+3. Cluster-wide objets: Recursos globales (nodos y volumenes)
+
+## Selectors
+Es una forma para seleccionar varios recursos dentro de kubernetes.
+Existen 3 tipos de selectores:
+
+### label selector
+Selecciona los recursos de k8s usando su label. Los labels son de `key:value` y estos se encuentran 
+en la metadata del manifiesto.
+
+Ejemplo
+```yaml {6-7}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels: 
+    env: prod
+    app: nginx-web
+```
+Para poder ver las labels de los pods podemos usar 
+
+```bash
+kubectl get pods --show-labels
+```
+Tambien podemos agregar labels por medio de `kubectl`
+
+```bash
+kubectl label pods nginx env=dev
+```
+
+### Recommend Labels 
+
+Son labels que se deberian usar en cada recurso 
+
+- app.kubernetes.io/name
+- app.kubernetes.io/instance
+- app.kubernetes.io/version
+- app.kubernetes.io/component
+- app.kubernetes.io/part-of
+- app.kubernetes.io/managed-by
+- app.kubernetes.io/created-by
+
+Labels sin el prefix `app.kubernetes.io/` son privadas para los usuarios
+
+Ejemplo:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels: 
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/instance: mysql-abxc
+    app.kubernetes.io/version: 5.7.2
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: wordpress
+    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/created-by: controller-manager
+```
+Para matchear las labels selector con diferentes servicios o replicas set debemos 
+recurrir a la documentacion debido a que cada recurso en kubernetes tiene una forma 
+distinta de matchear los label por ejemplo en servicios se usa la palabra `selector`
+pero en replicaset se usa `matchLabels`.
+
+2. `field selector` Selecciona los recusos usando la metadata
+3. `node selector` Selecciona nodos para pods 
+
+### Annotations 
+Nos ayuda a agrerar metada de terceros con el fin de extender sus funcionalidades 
+
+Ejemplo
+
+```yaml
+apiVersion: v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations: 
+    nginx.ingress.kubernetes.io/rewrite-target: /
+```
+
+Con ese ejemplo lo que hacemos es usar un controlador nginx para las reglas de trafico
+
+## Kubelet
+Es el agente responsable de la comunicacion entre los pods y el API server.
+
+Un Agente es el encargado de observar que le ocurre a los programas y comunicar 
+la informacion a los exteriores o tomar acciones.
+
+Kubelet es el encargado de: 
+- Observar los cambios de un pod
+- Configurar el container runtime para crear namespaces, descargar imagenes o ejecutar contenedores
+- Kubelet usa el `PodSpec file` para saber que contenedores y recursos debe usar.
+
+### gRPC
+Es un protocolo de comunicacion como (Rest o graphql). El cual nos permite comunicarnos entre
+programas con diferentes lenguajes de programacion. Normalmente los encontramos en sistemas distribuidos 
+o microservicios. 
+
+### Comunicacion 
+![kubelet-comunication](/img/kubernetes/kubelet-comunication.png)
+1. Kubelet esta monitoreando constantemente los cambios de los pods 
+2. Kubelet envia peticiones HTTPS al Api server
+3. Kubelet interactua con el storage por medio de CSI (container storage interface) usando 
+gRPC
+4. Kubelet interactura con el CRI (container runtime interface) usando gRPC
+5. El CRI se comunica con el CNI (container network interface) por su cuenta
+
+## Kubectl
+Es el CLI (command line interface) que nos permite controlar nuestros clusters 
+de kubernetes. Esto lo hace enviando Peticiones HTTPS al api server.
+:::note
+Kubectl usa un archivo de configuraciones el cual se encuentra en `~/.kube`
+:::
+Kubectl tiene la siguiente syntaxis 
+- kubectl [command] [type] [name] [flags] 
+
+### Command
+Es la operacion que queremos realizar 
+
+Commandos:
+- annotation: informacion de tipo `key:value` que podemos agregar a los recursos 
+- apply*: para ejecuta manifiestos con los que podemos crear o modificar recursos 
+- auth: Revisa si tienes la autorizacion para ejecutar una accion
+- autoscale: Crea un autoescalador que automaticamente modifica el numero de pods
+- cp: Copia archivos y directorio a los contenedores o desde los contenedores
+- create: Crear los recursos en un manifiesto (no puede modificar, por ende, casi siempre usaremos apply)
+- delete: Eliminar recursos 
+- describe: Muestra detalles de los recursos 
+- diff: diff la configuracion local contra la remota
+- edit: Edita el manifiesto de un recurso 
+- exec*: ejecuta un comando dentro del contenedor
+- expose*: Expone un pod por medio de un servicio
+- get*: Obtiene la informacion de un recurso en menos detalle que `describe`
+- kustomize: Hace un merge de manifiesto declarados en un `kustomize.yaml`
+- label: actualiza labels en los recursos
+- logs*: Print los logs de un recurso, contenedor o pod
+- patch: Actualiza los campos de un recurso usando strategic merge patch, JSON merge patch o JSON patch
+- port-forward: Forward un o mas puertos loales a un pod
+- proxy: Create un servidor proxy entre el localhost y el API server
+- run: Corre imagenes de contenedores en pods
+- scale: Cambia el tamaño de los pods, es decir, crea mas instancias.
+
+### Type
+Se refiere al tipo de recurso
+Hay mas de 50 tipos de recursos en Kubernetes algunos tienes abreviaciones no todos para mas informacion 
+podemos [visitar](https://kubernetes.io/docs/reference/kubectl/#:~:text=Valid%20resource%20types%20include%3A%20deployments%2C%20daemonsets%20and%20statefulsets.&text=Run%20a%20specified%20image%20on%20the%20cluster.&text=Update%20the%20size%20of%20the%20specified%20replication%20controller.&text=Configure%20application%20resources.)
+
+### Name
+Especifica el nombre del recursos, podemos usar mas de un nombre de un recurso separados por espacios 
+ademas sino indicamos el nombre nos mostrara todos.
+
+```bash
+kubectl get pods nginx-server1 nginx-server2
+```
+
+:::warning
+Los nombres son case-sensitive
+:::
+
+### Flags 
+Son las flags que podemos pasar a los comandos, similar a las flags que pasamos a los comandos en linux. 
+Usamos `--` seguido del nombre de la flag y el valor de la flag puede llevar `=` como un ` ` usar espacio 
+o igual es un poco random depende de cada uno. Hay alguno CLI que si son sensibles al usar `=` o ` ` pero 
+kubectl no
+
+- para las abreviaciones usamos solo `-`
+- las flags van a depender del comando que usemos 
+- No en todos los casos se debe pasar informacion a los flags
+
+Podemos encontrar documentacion sobre kubectl en el siguiente [link](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
+
+## Runtimes
+Docker y Kubernetes no son CRI(container runtime interface) sino que son orquestadores
+ellos usan CRI como `containerd` o `CRI-O` los que a su vez usan Container runtimes como 
+`runC` o `Crun`.
+
+- Orchestadores: Buildean imagenes, manejan servicios, networking, etc 
+- CRI: push/pull imagenes, supervisan contenedores, maneja el storage y el networking 
+- OCI (Open container iniciative): Corren los contenedores. 
+:::note
+Existen dos tipos de OCI nativos y virtualizados. La principal diferencia es la `isolation`.
+Los virtualizados pueden dar mas seguridad por medio de la `isolation`
+:::
+
+### Tipos de CRI
+
+#### ContainerD
+Es uno de los estandares de la industria. Buscan simplicidad, portabilidad y robustez. 
+Docker extrajo su CRI, lo convirtio en un proyecto llamado `containerd` y entro a la CNCF.
+
+La images que buildeamos con docker no son docker images sino que ya forman parte de un estandar
+#### CRI-O
+Es una buena alternativa a containerd, es el CRI que usa Kubernetes y tiene habilitado el 
+OCI. Esto habilita a que kubernetes pueda usar cualquier Container runtime como runc o Crun.
 
 ## Pods
 Es un set de contenedores, este set puede tener uno o varios contenedores pero normalmente 
@@ -161,7 +488,7 @@ un pod contiene un contenedor.
 El `hash` que tiene cada uno de los pods es generado por el template de deployment
 :::
 
-Podemos usar `kubect get pods` para obtener los pods, ademas podemos usar `kubectl get pods -o wide`
+Podemos usar `kubectl get pods` para obtener los pods, ademas podemos usar `kubectl get pods -o wide`
 para tener una informacion mas detallada sobre los pods.
 
 ### Manifiestos de pods 
@@ -179,6 +506,9 @@ spec:
 La seccion de `metadata` es donde pondremos el nombre del pod y algunas etiquetas
 que nos seran utiles a la hora de manejar recursos.
 
+`PodSpec File` basicamente es la seccion de configuracion 
+que describe a un pod, empieza con `spec:`
+
 Para aplicar el manifiesto del pod usamos el siguiente comando:
 
 ```bash 
@@ -186,7 +516,9 @@ kubectl apply -f ${PAT_TO_THE_FILE}
 ```
 
 :::caution
-Sino agregamos un ns en el manifiesto, lo creara en el ns que estemos ubicados actualmente.
+- Sino agregamos un ns en el manifiesto, lo creara en el ns que estemos ubicados actualmente.
+- Nunca deberiamos deployar pods con `kubectl apply` es la manera manual siempre 
+deberiamos deployar pods con `deployments` o `jobs`
 :::
 
 Para poder correr un comando en el pod podemos usar el siguiente comando.
@@ -750,3 +1082,26 @@ kubectl create secret generic db-credentials \
 
 Para mas informacion podemos visitar la 
 [documentacion](https://kubernetes.io/es/docs/concepts/configuration/secret/)
+
+
+## Cloud Native 
+
+Kubernetes funciona muy bien con el concepto de cloud native 
+debido a que buscamos ser agnosticos a la nube y a su vez poder usar herramientas 
+para todos los CSP
+
+### Roadmap
+
+1. Containerization (Docker)
+2. CI/CD (Github actions, jenkins, travis, argo, etc)
+3. Orchestation (Kubernetes)
+4. Observability (Grafana, fluentd)
+5. Services proxy, discovery and mesh
+6. Networking policie and security
+7. Distributed db and storage
+8. Streaming and messaging
+9. Container registry and runtime 
+10. Software distribution
+
+Para mas informacion podemos ir al siguiente [repo](https://github.com/cncf/landscape/blob/master/README.md#trail-map)
+
