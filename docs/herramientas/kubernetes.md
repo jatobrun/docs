@@ -480,6 +480,68 @@ La images que buildeamos con docker no son docker images sino que ya forman part
 Es una buena alternativa a containerd, es el CRI que usa Kubernetes y tiene habilitado el 
 OCI. Esto habilita a que kubernetes pueda usar cualquier Container runtime como runc o Crun.
 
+
+## Storage 
+### Container storage interface (CSI)
+Son el intermediario entre los container orchestatrion systems(COS) y los Storage providers (SP)
+con el fin de que se puedan comunicar de una forma estandarizada
+
+Algunos COS pueden ser:
+- Docker swarm 
+- Kubernetes 
+- Mesos 
+
+Algunos SP:
+- google cloud storage 
+- aws ebs
+- azure disk
+:::note
+Esto lo usamos cuando usamos persistent volumes
+:::
+### Backing store and etcd
+Los componentes dentro de kubernetes necesitan una forma de protegerse en caso de desastres
+estos pueden ser (el servidor se murio, se fue la luz, etc.). Entonces kubernetes usa etcd que 
+seria como la base de datos para almacenar estados de los recursos, mientras los datos de aplicacion 
+los guardamos en persistent volumes.
+
+Etcd: es una base de datos consistente y distribuida de tipo `key:value` la cual trabaja muy bien 
+con sistemas distribuidos o clusters. Otros proyectos ademas de kubernetes lo usan como CoreDNS y Rook
+
+:::note
+Podemos reemplazar `etcd` por una base de datos relacional como mariadb
+Minio - es un storage de tipo objetos como s3 o cloud storage
+Rook - es un sistema distribuido de storage automatiza todos los task de los storage administrators
+:::
+
+### Volumes 
+En kubernetes tenemos varios tipos de volumes:
+
+- Persistant Volume: es cuando vinculamos un disco duro a un pod. La informacion seguira existiendo 
+incluso, si el pod muere 
+
+- Ephimeral Volume: Volumes que existen con el pod, es decir, si el pod muere el disco se elimina tambien 
+se usa para almacenar informacion temporal 
+
+- Projected Volumes: Mapea diferentes discos duro en una sola ruta 
+
+- Volume Snapshot: Lo usamos como backups o rollbacks
+
+:::note
+A los pods podemos agregar cualquier tipo de volumen y cualquier cantidad.
+:::
+
+:::caution
+Kubernetes no te permite asociar un PV con un pod directamente debido a como se diseño kubernetes 
+ademas para eso kubernetes tiene un recurso llamado PVC (persist volume claim)
+:::
+
+#### PVC 
+Lo usamos para desacoplar los pods con los persiste volumes. Basicamente lo que hace el PVC es 
+hacer una peticion por un PV que cumpla ciertos criterios (tipo de almacenamiento, espacio, etc). 
+Si existe un PV que cumple dichas caracteristicas se hace un match y un bind
+
+### Configmaps
+
 ## Pods
 Es un set de contenedores, este set puede tener uno o varios contenedores pero normalmente 
 un pod contiene un contenedor.
@@ -814,7 +876,7 @@ kubectl get sts
 ```
 ### PVC (Persistant Volume Claim)
 Debido a que estamos usando `StatefullSet` y estos estan asociados con volumenes los cuales al final del
-dia son discos duros persistentes, cuando declaramos declaramos el volumen kubernetes se conecta a la api 
+dia son discos duros persistentes, cuando declaramos el volumen kubernetes se conecta a la api 
 del proveedor de nube y le solicita crear dicho disco duro, configurarlo y realizar el attach al nodo solicitante.
 Para esto usamos el `StorageClassName`.
 
@@ -879,7 +941,7 @@ los estados de los workers
 
 ### Servicios 
 Los servicios en kubernetes son una forma de poder contactar un set de pods ya sea desde adentro 
-del cluster o desde afuera.
+del cluster o desde afuera, por medio de una direccion que se mantiene incluso si el pod muere
 
 Utilizaremos como base este manifiesto de deployment
 
@@ -909,7 +971,7 @@ Principalmente hay 3 servicios en Kubernetes.
 
 - Clusterip Crea una ip fija  privada que esta dentro del cluster, que basicamente sirve como 
 `loadbalancer` entre todos los pods que le asigne a ese servicio, es decir, yo me puedo conecar a un pod
-y hacer un ping a es ip fija y la debe resolver.
+y hacer un ping a es ip fija y la debe resolver. Todo esto sirve de forma interna
 
 ```yaml title='cluster-ip.yaml' {6,11}
 apiVersion: v1
@@ -924,6 +986,13 @@ spec:
   selector:
     role: hello
 ```
+
+:::tip 
+Cuando usar CluusterIp?
+- debugging
+- dashboards internos 
+- Testing
+:::
 
 - Node port es otro servicio en kubernetes, este crea un puerto en cada nodo que va a recibir el trafico
 y lo va a mandar a los pods que tenga ese servicio.
@@ -960,10 +1029,74 @@ spec:
     role: hello
 ```
 
+- Headless envia traficos a pods especificos esto es util cuando tenemos statefullsets como DB
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  clusterIp: None 
+  selector:
+    role: hello
+```
+
+- ExternalName esto no retorna una ip estatica sino un CNAME el cual k8s identifica por medio de un DNS.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+spec:
+  type: ExternalName
+  externalName: my.database.example.com
+```
+:::tip
+Pro tip:
+Busybox es como la cajita de herramientas o la navaja suiza. Tiene mas de 300 utilidades de UNIX 
+y nos sera de mucha ayuda al momento de debuguear pods. para usarlo podemos ejecutar 
+
+```bash
+kubectl run --it --rm --restart=Never busybox --image=grc.io/google-containers/busybox sh 
+```
+:::
+### Traffic policies
+Con estas politicas podemos determinar como enrutar el trafico de los pods.
+
+External e Internal tiene los mismos tipos los cuales son:
+- cluster Enruta el trafico con todos los ready endpoints 
+- local Enruta el trafico solo con los ready endpoints locales del nodo.
+
+```yaml {12}
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+  internalTrafficPolicy: Local
+```
+
+:::caution 
+Si tenemos el traffic policie puesto en local y no tenemos ningun nodo ready en el nodo 
+el trafico no se enrutara.
+:::
+
 ### Ingress
 Basicamente lo que hace el ingress es un nuevo tipo de recurso en kubernetes que te permite hacer redirecciones 
 de trafico sobre tus pods de formas mas avanzadas, por ejemplo path base. Redirecciono a que pod quiero ir 
 por medio del path asi no debo estar creando subdominios, etc.
+El trafico llega a un ingress controller que puede ser de nginx este a su vez lo redirecciona a un ingress services 
+que definen las rutas que van a los servicios del cluster y esto lo mandan a los pods.
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -989,12 +1122,46 @@ spec:
             port:
               number: 8080
 ```
+
+### DNS (Domain Name system) 
+Es el servicio responsable de hacer la traduccion de un nombre a una ip.
+ 
+Kubernetes usa CoreDNS para realizar dicha traduccion. CoreDNS se asegura de
+que los pods y servicios FQDN (Fully qualified domain name). Sin CoreDNS la 
+comunicacion en el cluster no seria posible.
+
+Podemos usar varios plugins para coreDNS.
+CoreDNS se encuentra como servicio en el namespace de kube-system con el nombre
+de kube-dns para obtenerlo podemos hacer 
+
+```bash 
+kubectl get services kube-dns -n kube-system
+```
+Ademas cada pod tiene un archivo de configuracion para ayudar al DNS
+Lo encontramos ejecutando el siguiente comando
+```bash
+kubectl exec --it my-pod -- sh
+cat /etc/resolv.conf
+```
+Tambien podemos usar una utilidad de linux llamada `nslookup`
+para ver la ip de los CNAMES
+
+:::note
+Que es FQDN?
+Es lo que se conoce como absolute domain el cual es la ubicacion exacta en el 
+arbol de jerarquia.
+:::
 ## ConfigMaps
-Es un archivo que lo hosteo en kubernetes el cual puede ser accedido desde los pods.
+Es usado para almacenar informacion no confidencial usando `key:value` pair.
+Este archivo lo hosteo en kubernetes y puede ser accedido desde los pods.
+
 
 :::tip
 Esto puede ser usado para generar archivos de configuracion por stage o para las variables 
-de entorno
+de entorno, es decir, Podemos usar los confimaps para:
+1. variables de entorno 
+2. argumentos para las lineas de comandos 
+3. archivos de configuracion 
 :::
 
 ### Manifiesto
