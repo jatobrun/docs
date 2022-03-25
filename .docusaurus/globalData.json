@@ -1,0 +1,123 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs/",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "aws/cloud-developer",
+              "path": "/docs/aws/cloud-developer",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "aws/cloud-practitioner",
+              "path": "/docs/aws/cloud-practitioner",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "db/data-architect",
+              "path": "/docs/db/data-architect",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "db/data-lakes",
+              "path": "/docs/db/data-lakes",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "db/data-warehouse",
+              "path": "/docs/db/data-warehouse",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "db/databases",
+              "path": "/docs/db/databases",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "db/sql",
+              "path": "/docs/db/sql",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "gcp/cloud-digital-leader",
+              "path": "/docs/gcp/cloud-digital-leader",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "gcp/cloud-engineer",
+              "path": "/docs/gcp/cloud-engineer",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "herramientas/DDD",
+              "path": "/docs/herramientas/DDD",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "herramientas/docker",
+              "path": "/docs/herramientas/docker",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "herramientas/git",
+              "path": "/docs/herramientas/git",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "herramientas/jira",
+              "path": "/docs/herramientas/jira",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "herramientas/kubernetes",
+              "path": "/docs/herramientas/kubernetes",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "herramientas/terraform",
+              "path": "/docs/herramientas/terraform",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "herramientas/ux",
+              "path": "/docs/herramientas/ux",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "intro",
+              "path": "/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "lenguajes/dart",
+              "path": "/docs/lenguajes/dart",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "lenguajes/flutter",
+              "path": "/docs/lenguajes/flutter",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "lenguajes/go",
+              "path": "/docs/lenguajes/go",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "lenguajes/js",
+              "path": "/docs/lenguajes/js",
+              "sidebar": "tutorialSidebar"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

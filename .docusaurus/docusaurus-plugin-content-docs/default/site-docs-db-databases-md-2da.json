@@ -1,0 +1,26 @@
+{
+  "unversionedId": "db/databases",
+  "id": "db/databases",
+  "title": "DataBases",
+  "description": "las bases de datos se dividen de relaciones y no relacionales.",
+  "source": "@site/docs/db/databases.md",
+  "sourceDirName": "db",
+  "slug": "/db/databases",
+  "permalink": "/docs/db/databases",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/databases.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Databases!",
+    "permalink": "/docs/db/data-warehouse"
+  },
+  "next": {
+    "title": "Data Lakes!",
+    "permalink": "/docs/db/data-lakes"
+  }
+}

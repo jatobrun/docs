@@ -1,0 +1,680 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "loadedVersions": [
+        {
+          "versionName": "current",
+          "versionLabel": "Next",
+          "versionPath": "/docs/",
+          "tagsPath": "/docs/tags",
+          "versionEditUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs",
+          "versionEditUrlLocalized": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/i18n/en/docusaurus-plugin-content-docs/current",
+          "versionBanner": null,
+          "versionBadge": false,
+          "versionClassName": "docs-version-current",
+          "isLast": true,
+          "routePriority": -1,
+          "sidebarFilePath": "/Users/jatobrun/Documents/dev/docs/sidebars.js",
+          "contentPath": "/Users/jatobrun/Documents/dev/docs/docs",
+          "contentPathLocalized": "/Users/jatobrun/Documents/dev/docs/i18n/en/docusaurus-plugin-content-docs/current",
+          "docs": [
+            {
+              "unversionedId": "aws/cloud-developer",
+              "id": "aws/cloud-developer",
+              "title": "Cloud Developer!",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/aws/cloud-developer.md",
+              "sourceDirName": "aws",
+              "slug": "/aws/cloud-developer",
+              "permalink": "/docs/aws/cloud-developer",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/aws/cloud-developer.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Cloud Practitioner!",
+                "permalink": "/docs/aws/cloud-practitioner"
+              },
+              "next": {
+                "title": "Docker",
+                "permalink": "/docs/herramientas/docker"
+              }
+            },
+            {
+              "unversionedId": "aws/cloud-practitioner",
+              "id": "aws/cloud-practitioner",
+              "title": "Cloud Practitioner!",
+              "description": "",
+              "source": "@site/docs/aws/cloud-practitioner.md",
+              "sourceDirName": "aws",
+              "slug": "/aws/cloud-practitioner",
+              "permalink": "/docs/aws/cloud-practitioner",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/aws/cloud-practitioner.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Introduccion",
+                "permalink": "/docs/db/data-architect"
+              },
+              "next": {
+                "title": "Cloud Developer!",
+                "permalink": "/docs/aws/cloud-developer"
+              }
+            },
+            {
+              "unversionedId": "db/data-architect",
+              "id": "db/data-architect",
+              "title": "Introduccion",
+              "description": "Muchas mas empresas empiezan a tener decisiones basadas en datos",
+              "source": "@site/docs/db/data-architect.md",
+              "sourceDirName": "db",
+              "slug": "/db/data-architect",
+              "permalink": "/docs/db/data-architect",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/data-architect.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 5,
+              "frontMatter": {
+                "sidebar_position": 5
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Data Lakes!",
+                "permalink": "/docs/db/data-lakes"
+              },
+              "next": {
+                "title": "Cloud Practitioner!",
+                "permalink": "/docs/aws/cloud-practitioner"
+              }
+            },
+            {
+              "unversionedId": "db/data-lakes",
+              "id": "db/data-lakes",
+              "title": "Data Lakes!",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/db/data-lakes.md",
+              "sourceDirName": "db",
+              "slug": "/db/data-lakes",
+              "permalink": "/docs/db/data-lakes",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/data-lakes.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 4,
+              "frontMatter": {
+                "sidebar_position": 4
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "DataBases",
+                "permalink": "/docs/db/databases"
+              },
+              "next": {
+                "title": "Introduccion",
+                "permalink": "/docs/db/data-architect"
+              }
+            },
+            {
+              "unversionedId": "db/data-warehouse",
+              "id": "db/data-warehouse",
+              "title": "Databases!",
+              "description": "",
+              "source": "@site/docs/db/data-warehouse.md",
+              "sourceDirName": "db",
+              "slug": "/db/data-warehouse",
+              "permalink": "/docs/db/data-warehouse",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/data-warehouse.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "SQL!",
+                "permalink": "/docs/db/sql"
+              },
+              "next": {
+                "title": "DataBases",
+                "permalink": "/docs/db/databases"
+              }
+            },
+            {
+              "unversionedId": "db/databases",
+              "id": "db/databases",
+              "title": "DataBases",
+              "description": "las bases de datos se dividen de relaciones y no relacionales.",
+              "source": "@site/docs/db/databases.md",
+              "sourceDirName": "db",
+              "slug": "/db/databases",
+              "permalink": "/docs/db/databases",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/databases.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 3,
+              "frontMatter": {
+                "sidebar_position": 3
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Databases!",
+                "permalink": "/docs/db/data-warehouse"
+              },
+              "next": {
+                "title": "Data Lakes!",
+                "permalink": "/docs/db/data-lakes"
+              }
+            },
+            {
+              "unversionedId": "db/sql",
+              "id": "db/sql",
+              "title": "SQL!",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/db/sql.md",
+              "sourceDirName": "db",
+              "slug": "/db/sql",
+              "permalink": "/docs/db/sql",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/sql.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Intro",
+                "permalink": "/docs/"
+              },
+              "next": {
+                "title": "Databases!",
+                "permalink": "/docs/db/data-warehouse"
+              }
+            },
+            {
+              "unversionedId": "gcp/cloud-digital-leader",
+              "id": "gcp/cloud-digital-leader",
+              "title": "Cloud Digital Leader!",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/gcp/cloud-digital-leader.md",
+              "sourceDirName": "gcp",
+              "slug": "/gcp/cloud-digital-leader",
+              "permalink": "/docs/gcp/cloud-digital-leader",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/gcp/cloud-digital-leader.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "JS",
+                "permalink": "/docs/lenguajes/js"
+              },
+              "next": {
+                "title": "Cloud Engineer!",
+                "permalink": "/docs/gcp/cloud-engineer"
+              }
+            },
+            {
+              "unversionedId": "gcp/cloud-engineer",
+              "id": "gcp/cloud-engineer",
+              "title": "Cloud Engineer!",
+              "description": "",
+              "source": "@site/docs/gcp/cloud-engineer.md",
+              "sourceDirName": "gcp",
+              "slug": "/gcp/cloud-engineer",
+              "permalink": "/docs/gcp/cloud-engineer",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/gcp/cloud-engineer.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Cloud Digital Leader!",
+                "permalink": "/docs/gcp/cloud-digital-leader"
+              }
+            },
+            {
+              "unversionedId": "herramientas/docker",
+              "id": "herramientas/docker",
+              "title": "Docker",
+              "description": "Docker es una herramienta que permite contenerizar nuestra aplicacion dentro de un sandbox, lo cual permite mejorar la portabilidad de nuestra aplicacion, manejar siempre el mismo entorno en cualquier sitio.",
+              "source": "@site/docs/herramientas/docker.md",
+              "sourceDirName": "herramientas",
+              "slug": "/herramientas/docker",
+              "permalink": "/docs/herramientas/docker",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/herramientas/docker.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Cloud Developer!",
+                "permalink": "/docs/aws/cloud-developer"
+              },
+              "next": {
+                "title": "Kubernetes",
+                "permalink": "/docs/herramientas/kubernetes"
+              }
+            },
+            {
+              "unversionedId": "herramientas/git",
+              "id": "herramientas/git",
+              "title": "GIT",
+              "description": "CommitStyleGuide",
+              "source": "@site/docs/herramientas/git.md",
+              "sourceDirName": "herramientas",
+              "slug": "/herramientas/git",
+              "permalink": "/docs/herramientas/git",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/herramientas/git.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 3,
+              "frontMatter": {
+                "sidebar_position": 3
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Kubernetes",
+                "permalink": "/docs/herramientas/kubernetes"
+              },
+              "next": {
+                "title": "Terraform",
+                "permalink": "/docs/herramientas/terraform"
+              }
+            },
+            {
+              "unversionedId": "herramientas/jira",
+              "id": "herramientas/jira",
+              "title": "Jira",
+              "description": "Es una herramienta que ayuda a los equipos a manejar sus tareas.",
+              "source": "@site/docs/herramientas/jira.md",
+              "sourceDirName": "herramientas",
+              "slug": "/herramientas/jira",
+              "permalink": "/docs/herramientas/jira",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/herramientas/jira.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 6,
+              "frontMatter": {
+                "sidebar_position": 6
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "UI y UX",
+                "permalink": "/docs/herramientas/ux"
+              },
+              "next": {
+                "title": "Dart!",
+                "permalink": "/docs/lenguajes/dart"
+              }
+            },
+            {
+              "unversionedId": "herramientas/kubernetes",
+              "id": "herramientas/kubernetes",
+              "title": "Kubernetes",
+              "description": "Es una tecnologia que permite orquestar contenedores. Podemos usar esta",
+              "source": "@site/docs/herramientas/kubernetes.md",
+              "sourceDirName": "herramientas",
+              "slug": "/herramientas/kubernetes",
+              "permalink": "/docs/herramientas/kubernetes",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/herramientas/kubernetes.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Docker",
+                "permalink": "/docs/herramientas/docker"
+              },
+              "next": {
+                "title": "GIT",
+                "permalink": "/docs/herramientas/git"
+              }
+            },
+            {
+              "unversionedId": "herramientas/terraform",
+              "id": "herramientas/terraform",
+              "title": "Terraform",
+              "description": "Traditional IT",
+              "source": "@site/docs/herramientas/terraform.md",
+              "sourceDirName": "herramientas",
+              "slug": "/herramientas/terraform",
+              "permalink": "/docs/herramientas/terraform",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/herramientas/terraform.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 4,
+              "frontMatter": {
+                "sidebar_position": 4
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "GIT",
+                "permalink": "/docs/herramientas/git"
+              },
+              "next": {
+                "title": "UI y UX",
+                "permalink": "/docs/herramientas/ux"
+              }
+            },
+            {
+              "unversionedId": "herramientas/ux",
+              "id": "herramientas/ux",
+              "title": "UI y UX",
+              "description": "Contexto",
+              "source": "@site/docs/herramientas/ux.md",
+              "sourceDirName": "herramientas",
+              "slug": "/herramientas/ux",
+              "permalink": "/docs/herramientas/ux",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/herramientas/ux.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 5,
+              "frontMatter": {
+                "sidebar_position": 5
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Terraform",
+                "permalink": "/docs/herramientas/terraform"
+              },
+              "next": {
+                "title": "Jira",
+                "permalink": "/docs/herramientas/jira"
+              }
+            },
+            {
+              "unversionedId": "intro",
+              "id": "intro",
+              "title": "Intro",
+              "description": "Este es un repositorio donde se encuentran mis notas sobre las tecnologias que he ido aprendiendo,",
+              "source": "@site/docs/intro.md",
+              "sourceDirName": ".",
+              "slug": "/",
+              "permalink": "/docs/",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/intro.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1,
+                "slug": "/"
+              },
+              "sidebar": "tutorialSidebar",
+              "next": {
+                "title": "SQL!",
+                "permalink": "/docs/db/sql"
+              }
+            },
+            {
+              "unversionedId": "lenguajes/dart",
+              "id": "lenguajes/dart",
+              "title": "Dart!",
+              "description": "",
+              "source": "@site/docs/lenguajes/dart.md",
+              "sourceDirName": "lenguajes",
+              "slug": "/lenguajes/dart",
+              "permalink": "/docs/lenguajes/dart",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/lenguajes/dart.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Jira",
+                "permalink": "/docs/herramientas/jira"
+              },
+              "next": {
+                "title": "Flutter",
+                "permalink": "/docs/lenguajes/flutter"
+              }
+            },
+            {
+              "unversionedId": "lenguajes/flutter",
+              "id": "lenguajes/flutter",
+              "title": "Flutter",
+              "description": "Instalacion",
+              "source": "@site/docs/lenguajes/flutter.md",
+              "sourceDirName": "lenguajes",
+              "slug": "/lenguajes/flutter",
+              "permalink": "/docs/lenguajes/flutter",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/lenguajes/flutter.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Dart!",
+                "permalink": "/docs/lenguajes/dart"
+              },
+              "next": {
+                "title": "Go!",
+                "permalink": "/docs/lenguajes/go"
+              }
+            },
+            {
+              "unversionedId": "lenguajes/go",
+              "id": "lenguajes/go",
+              "title": "Go!",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/lenguajes/go.md",
+              "sourceDirName": "lenguajes",
+              "slug": "/lenguajes/go",
+              "permalink": "/docs/lenguajes/go",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/lenguajes/go.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 3,
+              "frontMatter": {
+                "sidebar_position": 3
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Flutter",
+                "permalink": "/docs/lenguajes/flutter"
+              },
+              "next": {
+                "title": "JS",
+                "permalink": "/docs/lenguajes/js"
+              }
+            },
+            {
+              "unversionedId": "lenguajes/js",
+              "id": "lenguajes/js",
+              "title": "JS",
+              "description": "Style Guide",
+              "source": "@site/docs/lenguajes/js.md",
+              "sourceDirName": "lenguajes",
+              "slug": "/lenguajes/js",
+              "permalink": "/docs/lenguajes/js",
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/lenguajes/js.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 4,
+              "frontMatter": {
+                "sidebar_position": 4
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Go!",
+                "permalink": "/docs/lenguajes/go"
+              },
+              "next": {
+                "title": "Cloud Digital Leader!",
+                "permalink": "/docs/gcp/cloud-digital-leader"
+              }
+            }
+          ],
+          "sidebars": {
+            "tutorialSidebar": [
+              {
+                "type": "doc",
+                "id": "intro"
+              },
+              {
+                "type": "category",
+                "label": "DB",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "db/sql"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "db/data-warehouse"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "db/databases"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "db/data-lakes"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "db/data-architect"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "AWS",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "aws/cloud-practitioner"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "aws/cloud-developer"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "Herramientas",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "herramientas/docker"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "herramientas/kubernetes"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "herramientas/git"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "herramientas/terraform"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "herramientas/ux"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "herramientas/jira"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "Lenguajes",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "lenguajes/dart"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "lenguajes/flutter"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "lenguajes/go"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "lenguajes/js"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "GCP",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "gcp/cloud-digital-leader"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "gcp/cloud-engineer"
+                  }
+                ]
+              }
+            ]
+          },
+          "mainDocId": "intro",
+          "categoryGeneratedIndices": []
+        }
+      ]
+    }
+  },
+  "docusaurus-plugin-content-pages": {
+    "default": [
+      {
+        "type": "mdx",
+        "permalink": "/docs/markdown-page",
+        "source": "@site/src/pages/markdown-page.md"
+      }
+    ]
+  },
+  "docusaurus-plugin-debug": {
+    "default": null
+  },
+  "docusaurus-theme-classic": {
+    "default": null
+  }
+}

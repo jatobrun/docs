@@ -1,0 +1,26 @@
+{
+  "unversionedId": "herramientas/docker",
+  "id": "herramientas/docker",
+  "title": "Docker",
+  "description": "Docker es una herramienta que permite contenerizar nuestra aplicacion dentro de un sandbox, lo cual permite mejorar la portabilidad de nuestra aplicacion, manejar siempre el mismo entorno en cualquier sitio.",
+  "source": "@site/docs/herramientas/docker.md",
+  "sourceDirName": "herramientas",
+  "slug": "/herramientas/docker",
+  "permalink": "/docs/herramientas/docker",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/herramientas/docker.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Cloud Developer!",
+    "permalink": "/docs/aws/cloud-developer"
+  },
+  "next": {
+    "title": "Kubernetes",
+    "permalink": "/docs/herramientas/kubernetes"
+  }
+}

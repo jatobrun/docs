@@ -1,0 +1,26 @@
+{
+  "unversionedId": "aws/cloud-practitioner",
+  "id": "aws/cloud-practitioner",
+  "title": "Cloud Practitioner!",
+  "description": "",
+  "source": "@site/docs/aws/cloud-practitioner.md",
+  "sourceDirName": "aws",
+  "slug": "/aws/cloud-practitioner",
+  "permalink": "/docs/aws/cloud-practitioner",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/aws/cloud-practitioner.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduccion",
+    "permalink": "/docs/db/data-architect"
+  },
+  "next": {
+    "title": "Cloud Developer!",
+    "permalink": "/docs/aws/cloud-developer"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "unversionedId": "gcp/cloud-engineer",
+  "id": "gcp/cloud-engineer",
+  "title": "Cloud Engineer!",
+  "description": "",
+  "source": "@site/docs/gcp/cloud-engineer.md",
+  "sourceDirName": "gcp",
+  "slug": "/gcp/cloud-engineer",
+  "permalink": "/docs/gcp/cloud-engineer",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/gcp/cloud-engineer.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Cloud Digital Leader!",
+    "permalink": "/docs/gcp/cloud-digital-leader"
+  }
+}

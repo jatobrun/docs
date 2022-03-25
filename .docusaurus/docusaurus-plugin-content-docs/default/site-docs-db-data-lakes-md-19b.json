@@ -1,0 +1,26 @@
+{
+  "unversionedId": "db/data-lakes",
+  "id": "db/data-lakes",
+  "title": "Data Lakes!",
+  "description": "Docusaurus can manage multiple versions of your docs.",
+  "source": "@site/docs/db/data-lakes.md",
+  "sourceDirName": "db",
+  "slug": "/db/data-lakes",
+  "permalink": "/docs/db/data-lakes",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/data-lakes.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "DataBases",
+    "permalink": "/docs/db/databases"
+  },
+  "next": {
+    "title": "Introduccion",
+    "permalink": "/docs/db/data-architect"
+  }
+}

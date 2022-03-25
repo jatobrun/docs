@@ -1,0 +1,26 @@
+{
+  "unversionedId": "db/data-architect",
+  "id": "db/data-architect",
+  "title": "Introduccion",
+  "description": "Muchas mas empresas empiezan a tener decisiones basadas en datos",
+  "source": "@site/docs/db/data-architect.md",
+  "sourceDirName": "db",
+  "slug": "/db/data-architect",
+  "permalink": "/docs/db/data-architect",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/db/data-architect.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "sidebar_position": 5
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Lakes!",
+    "permalink": "/docs/db/data-lakes"
+  },
+  "next": {
+    "title": "Cloud Practitioner!",
+    "permalink": "/docs/aws/cloud-practitioner"
+  }
+}
