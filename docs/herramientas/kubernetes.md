@@ -946,6 +946,87 @@ los estados de los workers
 
 4. Cada nodo tiene su propia ip
 
+### Tipos de networking
+
+Existen 4 tipos de comunicacion en las  redes dentro de los clusters:
+
+1. Contenedor a contenedor 
+2. Pod a pod
+3. pod a servicio 
+4. Externo a servicio 
+
+Existen 3 reglas principales:
+
+1. Todos los pods se pueden comunicar con todos los otros pods sin necesidad de usar una NAT.
+2. Todos los nodeos se pueden comunicar con todos los otros pos sin necesidad de una NAT. 
+3. La misma IP que el pod mira es la misma que los demas pods ven.
+
+#### Contenedor a Contenedor 
+Los contenedores dentro de un mismo pod contienen la misma ip por ende podemos 
+comunicarnos con otros contenedores usando `localhost` y un puerto diferente para 
+cada contenedor.
+
+Usando el parametro `containerPort` podemos asignar puertos a los contenedores dentro del pod
+```yaml {19}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+spec:
+  selector:
+    matchLabels:
+      run: my-nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: my-nginx
+    spec:
+      containers:
+      - name: my-nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+
+```
+#### Pod a Pod
+
+Tenemos 2 tipos de comunicacion:
+- pods dentro del mismo worker node
+
+Para llevar a cabo esta tarea hacemos uso de veth la cual creara una bridge 
+para comunicar el pod network namespace con el root network namespace del nodo.
+
+Con esto conseguimos que un pod se pueda comunicar con otro usando su direccion ip.
+
+:::note 
+Routing: permite comunicar multiples redes de forma independiente y manteniendolas 
+separadas usando un router.
+
+Bridge: permite conectar dos redes independientes y que parezcan que son una sola
+usando un bridge
+:::
+- pods en diferentes worker nodes
+
+esto depende bastante de cada proveedor de nube debido a que dicha conexion es 
+network specific. por ejemplo en el caso de aws tiene su propia implementacion del 
+CNI.
+
+#### Pod a servicio 
+
+Como un servicio crea una ip estatica que luego la usamos en la `iptables` que esta 
+dentro del nodo la cual nos va a servir posteriormente en la NAT. Podemos usar dicha ip 
+para conectarnos desde cualquier nodo a un servicio
+
+#### Exterior a un servicio
+Egress es como el trafico de los nodos sale hacia el internet.
+Este usa el CNI plugin para poder hablar con la vpc 
+
+Ingress por otro lado es como el trafico que viene de internet redirigirlo internamente.
+usa los servicios de k8s
+- podemos usar el load balancer service el cual es de tipo capa 4 (TCP/UDP)
+- mientras que el ingress es un load balancer de capa 4 o capa 7 
+
 ### Servicios 
 Los servicios en kubernetes son una forma de poder contactar un set de pods ya sea desde adentro 
 del cluster o desde afuera, por medio de una direccion que se mantiene incluso si el pod muere
@@ -1278,4 +1359,57 @@ para todos los CSP
 10. Software distribution
 
 Para mas informacion podemos ir al siguiente [repo](https://github.com/cncf/landscape/blob/master/README.md#trail-map)
+
+## Security
+dentro de cloud native tenemos un concepto importante el cual es las 4C de seguridad.
+Estas son:
+- Cloud
+- Clusters 
+- Containers
+- Code
+
+Con estas 4c usamos el mecanismo `depth in defense`. lo que quiere decir es que 
+usamos las 4c como 4 capas en donde podemos implementar mecanismos de seguridad 
+para que los atacantes tenga que ir pasando si quieren conseguir informacion valiosa.
+
+![4cs](/img/kubernetes/4cs.png)
+
+### Cloud Layer (base layer)
+La seguridad en esta capa sera self-managed infrastructure o managed.
+
+en la self-managed debemos buscar que buenas practicas se deben seguir 
+estas practicas van a cambiar segun el CSP. 
+
+Por otro lado en las managed debemos hacer todo por nuestra cuenta, es decir, 
+realizar las encriptaciones, manejar los usuarios, roles, permisos, acessos.
+
+### Cluster Layer
+:::note 
+Esto se aplica de forma general no importa que cluster estemos utilizando 
+ya sea kubernetes, docker swarm o mesos
+:::
+
+En esta capa tenemos dos secciones importantes:
+
+1. Componentes en el cluster: Aqui aseguramos las aplicaciones que se ejecutan 
+dentro del cluster
+
+2. Componentes del cluster: Aqui aseguramos los componentes del cluster
+
+![responsabilidades-cluster-layer](/img/kubernetes/cluster-layer.png)
+
+### Container and Code layer
+
+Container
+- Container vulnerability scanning 
+- image signing
+- Disallow privileged users
+- Use container runtime with strong isolation
+
+Code
+- Solo usar https 
+- Limitar el rango de puertos que usa la aplicacion
+- 3rd services dependecy 
+- Analisis de codigo estatico 
+- Dynamic probing attack (pentesting)
 

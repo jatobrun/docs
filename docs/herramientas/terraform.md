@@ -1275,6 +1275,18 @@ sera util para crear el issue en github.
 
 ## Notas importantes 
 Algunas notas sobre los comandos mas en detalle.
+### terraform init 
+Inicializa nuestro proyecto de terraform realizando:
+
+- La descarga de los plugins.
+- crea un directorio de terraform `.terraform`. 
+- crea un archivo de dependencias con el fin de forzar que todos tengan las mimas 
+versiones.
+
+- `terraform init -upgrade`
+- `terraform init -get-plugins-false`
+- `terraform init -plugin-dir=$PATH`
+- `terraform init -lockfile=MODE`
 
 ### Terraform get
 Es parecido al `terraform init` con la diferencia que buscamos actualizar 
