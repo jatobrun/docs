@@ -682,8 +682,76 @@ crear usuarios, crear bases de datos, agregar la data en la db
 Podemos usar ansible, cuando?
 Tenemos tareas repetitivas como hacer un backeup o truncar data diaria 
 
+Usamos terraform registry para publicar nuestros modulos 
 :::
 
+:::caution 
+Solo los modulos verificados aparecen en la barra de busqueda.
+:::
+
+#### Como usar modulos?
+
+Tenemos modulos de tipo publico los cuales los encontramos en Terraform registry 
+
+```hcl
+module "consul"{
+  sources = "hashicorp/consul/aws" #<NAMESPACE>/<NAME>/<PROVIDER>
+  version = "1.0.2"
+}
+```
+
+Tenemos modulos de tipo privado los cuales los encontramos en terraform cloud(Enterprise)
+
+```hcl
+module "vpc"{
+  sources = "app.terraform.io/example_corp/vpc/aws" #<HOSTNAME>/<NAMESPACE>/<NAME>/<PROVIDER>
+  version = "1.0.2"
+}
+```
+:::note 
+Para usar los modulos privados debemos autenticarnos usando `terraform login` en el terraform cloud
+Tambien podemos usar un API_TOKEN y configurarlo en el cli
+:::
+
+#### Como publicar modulos?
+
+Usamos terraform registry para publicar nuestro modulos publicos, ademas tenemos las siguientes ventajas:
+
+1. Versionamiento 
+2. Genera documentacion de forma automatica 
+3. Historial
+4. READMES
+5. Ejemplos 
+
+Pasos para publicar un modulo 
+(Usamos github para almacenar el codigo de nuestros modulos)
+
+1. Nombrar nuestro repositorios deben ser nombrados de una forma particular 
+`terraform-<PROVIDER>-<NAME>`. 
+2. Logear en terraform registry con nuestra cuenta de github.
+3. Seleccionar el repositorio 
+
+:::note 
+Para realizar actualizaciones a esos modulos usamos los tags de github. 
+:::
+
+#### Modulos verificados 
+
+Todos los modulos verificados tienen un simbolo azul con un visto dentro. 
+Dichos modulos son mantenidos activamente por hashicorp y otros miembros 
+de la comunidad.
+
+No necesariamente los modulos que no son verificados quieren decir que son malos.
+
+- Existen modulos que no son verificados altamente mantenidos y con buenas features.
+- Existen modulos verificados que son solo buenos ejemplos.
+
+#### Estructura de los modulos 
+![module-structure](/img/terraform/module-structure.png)
+- El punto de acceso es la carpeta root.
+- Tenemos 5 archivos requeridos (main.tf, variables.tf, outputs.tf, README, LICENSE).
+- En los modulos anidados debemos usar path absolutos y no relativos.
+- Los modulos anidados sin README son considerados para uso interno.
 ## Data Sources 
 
 Es una forma que tiene terraform en conseguir informacion que este fuera de terraform 
@@ -713,6 +781,21 @@ resource "aws_instance" "web" {
 
 ## Resources Meta Arguments 
 
+Los resources representan objetos en nuestra infraestructura. ejemplo VM, DB, etc.
+Algunos resources tienen un parametro `timeout` que nos sirve para definir el tiempo 
+en el que consideraremos si un recurso fallo al crearse.
+```hcl
+resource "aws_db_instance" "example" {
+
+  # ....
+
+  timeouts {
+    create = "60m"
+    delete = "2h"
+  }
+  
+}
+```
 Podemos usar estos argumentos en cualquier recurso con el fin de cambiar 
 su comportamiento los mas comunes son:
 
@@ -906,7 +989,7 @@ existen 3 grupos de tipos de datos:
 1. null: no significa la ausencia de valor, por ende vendria a ser el valor por default de cada 
 proveedor y se usa la palabra reservada `null`
 
-- complex/structural
+- [complex/structural](#complex-types)
 1. list 
 2. maps
 3. objects
@@ -1118,4 +1201,433 @@ terraform state mv module.app module.parent.module.app
 ### terraform state backups
 Todos los subcomandos de terraform state que modifican el estado 
 crearan un archivo backup. `list y show` como solo leen no crean un backup
-este archivo se llamada `terraform.tfstate.backup`
+este archivo se llamada `terraform.tfstate.backup`. POr buenas practicas siempre 
+se creara un archivo de tipo backup.
+
+
+
+## debugging and troubleshooting
+
+### Debugging
+Como cualquier otra tool de codigo, tendremos ocasiones donde queremos debuguear 
+nuestros archivos o necesitamos probar funcionalidades para esto terraform tiene 
+3 comandos bastante utiles. 
+
+- `terraform fmt` Re-escribe los archivos de configuraciones cumpliendo el formato y 
+estilo propio de terraform. Una opcion mas verbosa para ver que archivos se modificaron 
+es usar `terraform fmt --diff`
+
+- `terraform validate` Valida la sintaxis y los argumentos de los archivos. es decir, si 
+a un modulo le hace falta que le pasemos un parametro. Esto no valida que el argumento que 
+pasemos sea valido, es decir, debo pasarle un string y le paso `dasdads` solo valida que 
+sea un string no su contenido.
+
+- `terraform console` Una shell interativa para evaluar expresiones.
+
+### Troubleshooting
+En terraform tenemos 4 tipo de errores principales los cuales son:
+
+1. Language errors: Syntax error
+2. State errors: El estado de nuestros recursos fue cambiada del estado esperado
+3. Core errors: Bug en la libreria core
+4. Provider errors: La api del proveedor cambio y debemos hacer cambios
+
+:::note 
+las dos primeras son super sencillas de resolver, mientras que las dos ultimas son 
+dificiles de resolver.
+
+Para la primera podemos usar `terraform fmt`, `validate`, `version`
+Para la segunda podemos usar `terraform refresh`
+Para las dos ultimas podemos usar los logs para obtener info `TF_LOG` y abrir un issue 
+en github
+:::
+
+#### Logs 
+Podemos activar los logs de terraform usan las variables de entorno `TF_LOG environment`
+Para environment tenemos los siguientes valores:
+
+- TRACE
+- DEBUG 
+- INFO
+- WARN
+- ERROR
+- JSON
+
+Podemos habilitarlo de forma separada usando :
+
+- `TF_LOG_CORE`
+- `TF_LOG_PROVIDER`
+
+Para modificar el path donde se guardan los logs podemos usar la variable `TF_LOG_PATH`
+
+Estos comando los pasamos por ejemplo antes del comando `terraform apply`.
+Ejemplo
+
+```bash
+TF_LOG=CORE TF_LOG_PATH=./terraform.log terraform apply 
+```
+
+#### Crash Log
+terraform utiliza por detras el lenguaje de programacion go y las go rutines para que 
+cuando pase algo se ejecute dicho evento de panico y guarde un archivo de logs. Esto nos 
+sera util para crear el issue en github.
+
+
+## Notas importantes 
+Algunas notas sobre los comandos mas en detalle.
+
+### Terraform get
+Es parecido al `terraform init` con la diferencia que buscamos actualizar 
+modulos locales o descargarnos los ultimos cambios de dichos modulos. No queremos 
+nuevas actualizaciones de proovedores o cambiar el estado por eso no usamos 
+`terraform init`
+
+### Terraform plan 
+Crea un `execution plan` el cual es un archivo binario. Un `execution plan` consiste en:
+
+- Lee el estado remoto de los objetos con el fin de asegurarse que el estado este al dia 
+
+- Compara las configuraciones con el fin de pdoer notar los cambios.
+
+- Propone un set de cambios que se deberian aplicar para que ambas configuraciones esten iguales.
+
+Este comando no ejecuta los cambios, solo los propone.
+
+Existen dos tipos de plan:
+
+1. Planes especulativos cuando ejecutamos `terraform plan` 
+
+2. Planes guardados: podemos guardar nuestros planes de ejecucion usando el flag `--out` de la 
+siguiente manera `terraform plan --out=mi-plan.plan`. 
+
+:::note
+- No hay name conventions para los nombres que usamos para guardar nuestros planes
+- Suele ser util en pipelines de CI/CD
+:::
+
+### Terraform apply
+Ejecuta los cambios propuestos en el `execution plan`
+
+Como tenemos dos tipos de planes tambien tenemos dos tipos de terraform apply 
+
+1. Usando Automatic plan Mode.  Ejecutamos `terraform apply` automaticamente aplica el validate,
+crea el plan y lo ejecuta. En este modo si necesitaremos una aprobacion para ejecutar dicho plan.
+
+2. Saved plan mode. Ejecutamos `terraform apply FILE` automaticamente se crean los cambios 
+con el plan de execution que le enviamos.
+
+:::tip 
+Para inspeccionar el plan podemos usar `terraform show`
+:::
+
+## Drift
+Esto ocurre cuando nuestros recursos esperados estan en un estado diferente 
+a nuestro estado esperado.
+
+Hay 3 formas de resolver dicho conflicto:
+
+- Remplazando recursos. Esto ocurre cuando un recurso esta dañado y terraform no lo reconoce.
+Usamos el flag `--replace`. Antes usabamos `terraform taint` para marcar los recursos que en un futuro 
+quedaran deprecated. Pero desde la version `0.152` este comando esta deprecated.
+
+:::note
+Con el comando `terraform apply --replace="aws_instance.my_ec2[0]"`. solo podemos un 
+recurso a la vez
+:::
+
+- Importando recursos. Cuando un recurso lo queremos agregar de forma manual al estado. Usamos 
+el `--import`
+
+```hcl
+resource "aws_instance" "example" {
+  # ... instance configuration ...
+}
+```
+con esto al usar `terraform import aws_instance.example [id]` importamos un recurso que creamos de 
+forma manual en la consola. 
+
+:::caution 
+- No todos los recursos puden ser importados automaticamente al state file. Deberiamos revisar 
+la documentacion para saber que recursos si tienen este feature.
+- Solo podemos importar un recurso a la vez
+:::
+
+- Actualizando el estado. Lee la configuracion actual de todos los recursos remotos y actualiza 
+el estado para los cambios. Sin realizar cambios en nuestra infraestructura remota.
+
+Podemos usar `terraform refresh` el cual es un alias para   `terraform apply --auto-approve --refresh-only`
+
+Consideremos el siguiente escenario para que se entienda mejor.
+
+Creamos un script para que provisione una maquina virtual en aws. A uno de nuestros ingenieros le decimos 
+que elimine la maquina virtual y el en vez de modificar el script lo elimina directo de la consola. 
+
+Si ejecutamos terraform apply. 
+1. Asumira que el estado es correcto,que nos hace falta una maquina virtual 
+2. Propondra provisionar una vm 
+
+Si ejecutamos `terraform apply --refresh-only`
+1. Se dara cuenta que la maquina virtual que creamos falta 
+2. Se dara cuenta que el evento que la maquina virtual no este es aproposito.
+3. propondra cambiar el estado y no creara una maquina virtual.
+
+## Workflows 
+
+Las 3 fases basicas son:
+1. Escribir -> Escribir la infraestructura que vamos a provisionar
+2. Plan -> Crear el plan de ejecucion
+3. Apply -> Provisionar infraestructura
+
+A medida que los grupos van creciendo los workflows deben ir evolucionando 
+tenemos 3 tipos de workflows a medida que los equipos van creciendo
+
+- Indivual 
+- Equipos que usan solo terraform 
+- Equipos que usan terraform cloud
+
+### Individuales 
+
+-  Escribir 
+1. Escribimos nuestros archivos de terraform en cualquier editor de texto 
+2. Guardamos nuestros cambios usando VCS (Version control system) como git
+3. Usamos de forma repetitiva `terraform plan` y `terraform validate` para 
+no tener errores de sintaxis
+
+- Plan
+1. Cuando ya no tenemos errores hacemos un commit local
+2. Solo usaremos una rama `main`
+3. Cuando terminamos el proceso de commit pasamos al apply
+
+- Apply
+1. Ejecutamos `terraform apply`
+2. Revisamos el plan de ejecucion 
+3. Luego de que los cambios se hayan provisionado de forma exitosa hacemos un push
+a nuestro repositorio remoto.
+
+### Equipos 
+
+-  Escribir 
+1. Cada equipo escribe su codigo de forma local con su editor favorito
+2. Se crean ramas por equipo con el fin de poder manejar los conflictos 
+3. Terraform plan puede ser un buen feedback para equipos pequeños
+4. Para equipos mas largos las credenciales empiezan a ser un problema por ende 
+usar un pipeline de CI/CD es lo mejor
+
+- Plan
+1. Cuando una rama esta lista procedemos a realizar el PR el cual generara el plan 
+de ejecucion que lo adjuntamos en el PR para revision
+
+- Apply
+1. Una vez aprobado y mergeado el PR se procede a ejecutar el pipeline el mismo que 
+ejecutara el `terraform apply`
+
+:::notes 
+- El equipo de devops debe mantener y modificar los pipelines de CI/CD
+- Se debe pensar como almancenar el `state file`
+- No podemos tener control de accesos o permisos, es decir, quien puede destruir 
+recursos, quien puede aplicarlos, etc.
+- Debemos gestionar como inyectar secrets de una forma segura
+- Manejar multiples ambientes puede ser algo caotico.
+:::
+
+### Equipos usando terraform cloud
+
+- Escribir 
+1. usaremos terraform cloud como nuestro backend remoto
+2. Las variables las almacenamos en terraform cloud y no en nuestro computadora 
+usando archivos `.tfvars`
+3. terraform cloud tiene integraciones con los VCS y automaticamente crea los pipelines
+4. Escribir el codigo de cada equipo en diferentes ramas.
+
+- Plan 
+1. Cuando una rama esta lista procedemos a realizar el PR el cual generara el plan 
+de ejecucion que lo adjuntamos en el PR lo podemos revisar y comentar usando terraform cloud
+
+- Apply 
+1. Luego del PR sea mergeado terraform cloud ejecutara el apply. Una persona del equipo debe confirmar
+dichos cambios.
+
+
+## Backends
+
+Define donde y como las operaciones se ejecutan, ademas donde almacenamos las snapshots.
+
+Existen dos tipos de terraform backends:
+
+1. Standard backend
+
+- solo almacena los estados
+- No podemos realizar operaciones como `terraform apply`
+- Son backends de terceros como aws s3
+
+:::note
+Algunas opciones de backends de terceros son:
+- S3 podemos lockear usando DynamoDB
+- Azure blob storage lockeamos de forma integrada
+- Google cloud storage lockeo de forma integrada
+- Alibaba cloud object storage services lockear usando TableStore
+- OpenStack Swift lockeo integrado
+- Tencent cloud object storage lockeo integrado
+- Manta lockeo integrado
+
+Podemos usar servicios mas extravagantes 
+- Hashicorp consul 
+- etcd
+- postgresdb
+- kubernetes secrets
+- artifactory no tiene lockeo
+:::
+
+2. Enhanced backends 
+- Podemos almacenar el estado 
+- Ejecutar comandos como `terraform apply` 
+Tenemos 2 tipos:
+- Local: Archivos son guardados en la maquina local donde ejecutamos comandos.
+- Remote: Archivos e informacion es almacenada en la nube.
+
+:::caution
+Los backups solo se guardan en la maquina local no en el backend remoto
+:::
+:::note 
+- no necesitamos una cuenta de terraform cloud para crear remote backends
+- si usamos un remote backend necesitamos configurar las credenciales de CSP
+:::
+
+### Inicializacion del Backend 
+Podemos usar un archivo con la configuracion del backend con el fin de ponerlo en un 
+gitignore y que en nuestros repositorios no exista configuracion acerca de nuestro repositorios.
+
+```hcl title=main.tf
+
+terraform {
+  required_version = "~> 2.0.1"
+  backend "remote" {}
+}
+```
+
+```hcl title=backend.hcl
+workspace = {name = "workspace"}
+hostname = "app.terraform.io"
+organization = "company"
+```
+Podemos usar el flag `-backend-config` para pasar dicho archivo de configuracion
+
+ejemplo 
+
+```bash 
+terraform init --backend-config backend.hcl
+```
+
+### terraform_remote_state
+Podemos obtener los outputs de otros archivos de estado por medio del data source 
+`terraform_remote_state` el cual usa el ultimo snapshot del estado de la infraestructura.
+
+Para backend remotos
+
+```hcl 
+
+data "terraform_remote_state" "vpc" {
+  backend = "remote"
+  config = {
+    organization = "hashicorp"
+    workspaces = {
+      name = "prod"
+    }
+  }
+}
+
+resource "aws_instance" "example" {
+  subnet_id = data.terraform_remote_state.vpc.outputs.subnet_id
+}
+```
+:::note 
+Solos los outputs del modulo root seran expuestas, si tenemos modulos anidados 
+debemos explicitamente exponerlas tambien en el moodulo root, sino no podremos acceder
+:::
+
+Para backend locales 
+```hcl 
+
+data "terraform_remote_state" "vpc" {
+  backend = "local"
+  config = {
+    path = "..."
+  }
+}
+resource "aws_instance" "example" {
+  subnet_id = data.terraform_remote_state.vpc.outputs.subnet_id
+}
+```
+:::note 
+usando los backend locales debemos pasarle la ruta absoluta del archivo de estado 
+Podemos usar data sources como alternativa al `terraform_remote_state` pero 
+recordemos que tendremos mas informacion sobre el recurso esto incluye informacion sensible
+:::
+
+### Bloqueo del estado
+terraform de forma automatica bloquea el estado cada que se ejecuta una operacion
+de escritura. Esto ayuda a que no se pueda corromper el estado cada que otros lo usen.
+
+Terraform nos dara un output message si se demora el proceso de locking del state file.
+
+Para desabilitar el bloqueo en los comandos que usamos utilizamos el flag `--lock` pero 
+no es recomendado
+
+Tambien tenemos una forma de desbloquear de un state file con el comando 
+`terraform force-unlock`. Si desbloqueamos el archivo mientras alguien lo esta utilizando 
+causamos que multiples personas modifiquen dicho archivo. Debemos usar este comando 
+en las ocasiones cuando el desbloque automatico falla por cualquier razon. En estas situaciones 
+terraform imprimira por consola un id el cual usaremos en el comando de la siguiente forma 
+
+```bash 
+terraform force-unlock 129239123921-ada231adsa-23123asdasd --force
+```
+
+con el flag `--force` skipeamos la confirmacion de lockeo.
+
+### Proteger informacion sensible 
+
+Los archivos de estado de terraform puden contener informacion sensible como contraseñas, usuarios, 
+ips, etc. Causando posibles ataques y robo de informacion.
+
+Cuando usamos local state debemos tener las siguientes consideraciones
+- No debemos compartir dicho archivo con nadie 
+- Debemos agregar dicho archivo en el .gitignore 
+
+Cuando usamos remote state debemos tener las siguientes consideraciones
+- Este archivo se guarda en memoria y no en disco
+- Este archivo esta encrypted-at-rest
+- Este archivo esta encrypted-at-transit
+
+:::cation 
+Si usamos almacenamiento de tercero debemos tener en cuenta si cumple con las politicas de seguridad 
+correspondientes para que nuestra informacion este segura y si esta activada por default.
+:::
+
+### Ignore files 
+Es muy parecido a la funcionalidad del `.gitignore` con la diferencia que terraform 
+solo leera el archivo que esta en el root module, es decir, no sirve de nada tener varios archivos 
+`.terraformignore` en los diferentes sub-modulos porque no seran leidos.
+
+Por defecto sino tenemos ningun archivo `.terraformignore`. terraform excluira los siguientes directorios:
+
+- `.git/`
+- `.terraform/`
+
+## Complex Types
+Un complex type es un tipo de dato que agrupa multiples datos en uno.
+
+Complex types los representamos por un constructor algunos tienen
+tienen una palabra reservada.
+
+Tenemos dos categorias para estos tipos de datos:
+
+- Collection types (para agrupar valores similares)
+  - list, map y set
+- Structural types (para agrupar valores que pueden no ser similares)
+  - tuple y object
+
+### Collection types
+
+
+### Structural types
