@@ -1640,6 +1640,245 @@ Tenemos dos categorias para estos tipos de datos:
   - tuple y object
 
 ### Collection types
+Este tipo de dato nos ayuda a agrupar multiples valores del mismo tipo 
+en un solo valor.
 
+Tenemos 3 tipos de collection types:
+
+- List: es como el tipico array y podemos usar index para acceder a los elementos.
+Todos los datos dentro del list deben ser del mismo tipo
+
+```hcl
+variable "planet" {
+  type = list 
+  default = ["mars", "earth", "moon"]
+}
+planet = var.planet[0]
+```
+- Map es como el tipico diccionario de python o JSON object, 
+usamos la key para acceder al valor
+
+```hcl
+variable "plans" {
+  type = map
+  default = {
+    "PlanA" = "10 USD",
+    "PlanB" = "20 USD"
+  }
+}
+plan = var.plans["PlanA"]
+```
+- Sets: una colección de valores únicos que no tienen ningún 
+identificador secundario u ordenación. Como todos los elementos 
+deben ser del mismo tipo, se castean con el tipo de dato 
+del primer elemento.
 
 ### Structural types
+Este tipo de dato nos ayuda a agrupar multiples valores de diferentes tipos
+en un solo valor.
+Requieren un schema como argumento con el fin de especificar que tipo de valores 
+van en cada elemento.
+
+Tenemos dos tipos de structural types
+
+- Objects es como un JSON con multiples tipos de valores
+
+```hcl
+variable "plans" {
+  type = object({
+    PlanA = string,
+    PlanB = string
+  })
+  default = {
+    "PlanA" = "10 USD",
+    "PlanB" = "20 USD"
+  }
+}
+plan = var.plans["PlanA"]
+```
+
+- Tuples es como una lista dinamica
+
+```hcl
+variable "planet" {
+  type = tuple([string, number, bool]) 
+  default = ["mars", 1, false]
+}
+planet = var.planet[0]
+```
+:::note 
+Podemos usar comas como simplemente salto de linea en los maps y objects.
+Necesitamos el schema para los structural types
+:::
+
+## Built-in Functions 
+Son funciones que vienen propias de terraform que nos permite 
+realizar transformaciones o combinar valores
+
+### Numeric
+- abs(num): retorna el valor absoluto del num
+- floor(num): redondea hacia abajo el num
+- log(num, base): retorna el logaritmo del num en la base 
+- ceil(num): redondea hacia arriba el num
+- min(set[]): retorna el minimo valor del set
+- max(set[]): retorna el maximo valor del set
+- parseint(num:string, base:int): parsea a int el string numero en la base que le digamos
+- pow(num, exp): calcula el valor de num a la exp
+- signum(num): representa el signo del numero (-1, 0, 1)
+
+### String
+- chomp(string): remueve los salto de lineas en los string
+- format(string, value): como el format de python para agregar variables al string
+- formatlist(string, valuelist): como el anterior pero con una lista de valores
+- indent(spaces, string): agrega la identacion 
+- join(delimiter, list(string)): une todos los elementos de un array usando el delimiter
+en un solo string
+- lower(string): regresa todo en minusculas del string 
+- regex(regex, string): aplica una expresion regular a un string y devuelve los substrings
+- replace(phrase, stringReplace, newString): reemplaza el stringReplace por el newString en el phrase
+- split(delimeter, string): transforma el string en un array, usa el delimiter para saber el inicio 
+y fin de cada elemento
+- strrev(string): el reverso del string
+- substr(string, from, to) slice de un string desde from hasta to 
+- title(string): capitaliza un string es decir convierte en mayusculas la primera letra de cada palabra
+- trim(string, delimiter): elimina el delimiter del string al inicio y al final
+- trimprefix(string, delimiter): elimina el delimiter del inicio
+- trimsuffix(string, delimiter): elimina el delimiter del final
+- trimspace(string): elimita todos los whitespaces
+- upper(string): pone en mayuscula un string
+
+### Collection
+- alltrue(list) retorna true si todos los elementos son true o si es una collection vacia sino retorna false
+- anytrue(list) retorna true si existe algun true sino retorna false
+- chunklist(list, size) retorna una lista de lista, crea agrupaciones de elementos de un tamaño establecido
+- coalesce(list) retorna el primer valor que no es null o un string vacio
+- coalescelist(list1, list2, list3) retorna la primera lista que no sea vacia
+- compact(list) retorna una lista sin string vacios 
+- concat(list1, list2) retorna la fusion de dos listas en una
+- contains(list, element) retorna true si la lista contiene el elemento caso contrario false
+- distinct(list) retorna una lista sin los duplicados, solo con los elementos unicos
+- element(list, index) retorna el elemento en la posicion index de la lista
+- index(list, element) retorna el index del element de la lista
+- flatten(list) retorna una lista sin toda la listas anidadas
+- length(list) retorna la cantidad de elementos de la lista 
+- keys(map) retorna una lista con las claves del map
+- lookup(map, key, default) retorna el valor de la key sino lo encuentra devuelve default
+- matchkeys(list1, list2, list3) retorna una lista con los elementos que se repiten
+- merge(maps) retorna un solo map con todos los maps que le pasamos por argumentos fusionados en uno solo.
+- one(list) retorna el primer elemento de una lista
+- range(number) genera una lista de numeros consecutivos usando el number como limite
+- reverse(list) genera una lista con el orden reverso
+- setintersection() retorna una lista con la interseccion 
+- setproduct() retorna una lista con toda las posibles combinaciones de los elementos dentro 
+- setsubtract() retorna los elementos que no tengan en comun de varias listas
+- setunion() retorna una lista de todos los elementos 
+- sort() retorna un array ordenado de forma lexicographically
+- slice() slice de un array
+- sum() retorna la suma de los elementos de una lista
+- values(map) retorna una lista con los valores del map
+- zipmap(keysList, valuesList) retorna un map con las claves y lo valores en sus listas respectivas
+### Encoding
+
+- base64encode(string) retorna un string en base64
+- jsonencode(string) retorna un string en json
+- yamlencode(string) 
+- textencodebase64
+- base64gzip()
+- urlencode() 
+
+### Decoding
+- base64decode(string) retorna un string decodeado
+- csvdecode()
+- jsondecode()
+- textdecodebase64()
+- yamldecode()
+
+### Filesystem
+- abspath(path.root) me devuelve el path absoluto de un path relativo
+- dirname("foo/bar/baz.txt") devuelve la carpeta o el direction elimina el archivo
+- pathexpand() devuelve el path absolut
+- basename() devuelve el nombre del archivo dado un path
+- file() lee el contenido de un archivo
+- fileexists() determina si un archivo existe
+- fileset() retorna una lista con los paths de los archivos que solicite
+- filebase64() retorna el valor del archivo en base64 bueno para imagenes
+- templatefile() retorna una lista con los valores del archivo de configuracion
+
+### Date and time
+- formatdate() formateamos una fecha UTC en el formato que queramos
+- timeadd() agregamos tiempo a una hora
+- timestamp() retorna el tiempo en UTC
+
+### Hash and Cripto
+- base64sha256()
+- base64sha512()
+- **bcrypt()**
+- filebase64sha256()
+- filebase64sha512()
+- filemd5()
+- filesha1()
+- filesha256()
+- filesha512()
+- **md5()**
+- rsadecrypt()
+- **sha1()**
+- sha256()
+- sha512()
+- **uuid()**
+- uuidv5()
+
+### Ip network
+- cidrhost()
+- cidrnetmask()
+- cidrsubnet()
+- cidrsubnets()
+
+### Type conversion
+- can() retorna true si el valor existe
+- defaults()
+- nonsensitive() a un valor sensible lo trata como no sensible
+- sensitive() trata a un valor como sensible
+- tobool() convierte un valor en boolean
+- tomap() convierte un valor en un map
+- toset() convierte un valor en un set
+- tolist() convierte un valor en una lista
+- tonumber() convierte un valor en un numero
+- tostring() convierte un valor en un string
+- try()
+
+## Terraform cloud
+Terraform cloud es una plataforma que ayuda a los equipos a usar terraform
+tiene las siguientes features:
+
+- Manejo de los state files 
+- historial de ejecucion de pipelines
+- historial de estados previos
+- inyeccion de variables facil y seguro
+- tageo
+- triggers
+- workspace
+- compartir el estado de forma global
+- comentar en la ejecucion del pipeline
+- Niveles de permisos como en gcp
+- Notificaciones via slack, email, etc.
+- Policy as code usando sentinel
+- MFA
+- Estimacion de costos 
+- Multiples integraciones
+
+### Terminos
+
+- Organization: es el conjunto de workspaces
+- Workspace: es un ambiente unico 
+- Teams: se componene por multiples miembros y puede acceder a diferentes workspace
+- Runs: ejecucion del execution plan en un ambiente virtual
+
+### Run workflows
+
+tenemos 3 tipos:
+
+1. Version control workflow se produce cuando ejecutamos un PR en github o hacemos un merge
+2. CLI-driven cuando de forma local ejecutamos comandos como terraform apply
+3. API-driven usando el api de terraform 
+
+### Organizational Level permissions
