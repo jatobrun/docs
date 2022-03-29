@@ -1882,3 +1882,146 @@ tenemos 3 tipos:
 3. API-driven usando el api de terraform 
 
 ### Organizational Level permissions
+Podemos configurar para que todas las personas dentro de una organizacion puedan 
+hacer lo siguiente:
+
+- Manejar politicas
+- Manejar el sobreescrimiennto de las politicas
+- manejar workspace
+- manejar VCS settings
+
+Existe un rol especial dentro de las organizaciones que son los owners. 
+Una organizacion puede tener uno o mas owners.
+Los permisos especiales que tenemos con este rol son:
+- Publicar modulos privados 
+- Invitar usuarios a la organizacion 
+- manejar la membresia de los equipos 
+- ver todos los secrets del team 
+- manejar permisos de la organizacion 
+- manejar la facturazion de la organizacion 
+- eliminar organizacion 
+- manejar las configuraciones de la organizacion
+
+### Workspace Level permissions
+Manejar los recursos y las configuraciones de los workspaces
+
+Tenemos permisos en una forma mas granular (custom permission):
+- leer runs
+- encolar plans 
+- correr run
+- bloquear y desbloquear workspaces
+- descargar sentinel mocks
+- leer una variable 
+- escribir variables
+- leer outputs del estado 
+- leer versiones del estado 
+
+Tenemos tambien grupos de de permisos preestablecidos:
+
+- Write
+- Plan 
+- Read
+
+Asi como en las organizaciones tenemos un owner en los workspaces 
+tenemos los admins.
+
+### Api Token
+terraform cloud soporta 3 tipos de tokens:
+
+#### Organization
+- Cada organizacion solo puede tener un token valido a la vez
+- solo los owners pueden generar y revocar tokens
+- los token son creados para configurar y crear workspaces y equipos
+
+#### team
+- Cada equipo solo puede tener un token a la vez
+- cualquier miembro del equipo puede revocar o generar un token
+- Cuando re generamos un token el anterior se vuelve invalido
+- Diseñado para realizar operaciones en el workspaces
+
+#### User
+- Hereda los permissions del miembro del equipo
+- Puede ser un usuario o una pc
+
+### Estimacion de costos 
+Terraform tiene un feature para estimar los costos de los recursos que tenemos 
+en la nube. El problema con esto es la disponibilidad de servicios que tenemos 
+Azure es el que mas servicios tenemos, le sigue aws y el ultimo es gcp.
+
+### Cloud run environment
+Cuando terraform cloud ejecuta un plan o un apply se crea un run environment.
+Esto es una virtual machine que usa linux con arquitectura x86_64. Pero no podemos 
+saber si es ubutun, debia, centos, etc.
+
+Terraform agregara estas variables con cada ejecucion:
+- TFC_RUN_ID el identificador unico del run 
+- TFC_WORKSPACE_NAME nombre del workspace que se esta ejecutando 
+- TFC_WORKSPACE_SLUG org/workspace
+- TFC_CONFIGURATION_VERSION_GIT_BRANCH nombre de la rama
+- TFC_CONFIGURATION_VERSION_GIT_COMMIT_SHA el hash del commit 
+- TFC_CONFIGURATION_VERSION_GIT_TAG tag de la rama
+
+Podemos acceder a las variables usando 
+```hcl
+variable "TFC_RUN_ID" {}
+```
+### terraform cloud agents 
+Es un feature pagado que nos permite conectar nuestra infraestructura privada u 
+on-premises. Esto es util cuando tenemos infraestructura que usa vSphere, Nutanix, Openstack
+
+- Estos agentes solo se ejecutan en infraestructura x86_64, con sistema operativo linux
+- Podemos ejecutar el agente usando docker 
+- Soporta terraform desde la version 0.12 en adelante
+- Necesitamos 4gb de disco duro como minimo y 2gb de ram 
+- Necesitamos tener el puerto 443 abierto y registrados los siguientes dominios 
+  - app.terraform.io
+  - registry.terraform.io
+  - releases.hashicorp.com
+
+## Terraform Enterprise
+Es la version de terraform platform pero que nosotros administramos, es decir, 
+provisionamos un servidor y ejecutamos todo lo relacionado con terraform.
+
+Ventajas:
+- No tenemos limites en los recursos 
+- audit logging
+- SAML
+### Requerimientos 
+
+1. Modo de operacion -> donde almancenaremos la informacion 
+  - Servicios externos 
+    - Postgres
+    - S3
+  - Disco duro externos -> almacenamos la informacion en discos duros separados de la maquina
+  - Demo -> almacenamos la informacion en la misma maquina y luego le hacemos backup
+
+2. Credenciales -> Verifica si tenemos las credenciales pertinentes y los certificados
+  - Licencia: lo obtenemos de Hashicorp
+  - Certificado y llave privada: La generamos
+
+3. instancia de linux 
+  - Podemos usarla en:
+    - ubuntu 
+    - debian
+    - centos
+    - redHat
+    - oracle linux 
+    - amazon linux
+  - requerimientos de hardware
+    - 4cpus 
+    - 8gb de ram
+    - 10 gb de disco duro el root
+    - 40gb de disco para la docker data
+
+:::note 
+Podemos tener un entorno `air gapped`, lo cual significa que nuestra maquina 
+no tendra acceso a internet por ende no la podran hackear desde internet.
+Esto normalmente lo usa el sector publico. terrform enterprise tiene una version 
+para esto
+:::
+
+### Pricing 
+
+![terraform-pricing](/img/terraform/terraform-pricing.png)
+
+## Workspace
