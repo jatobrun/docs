@@ -108,7 +108,7 @@ o servicio sin la necesidad de invertir en los equipos.
 ## Terminologia
 
 ### Availability (High Availability)
-La capacidad de garantizar que un servicio permanezca disponible. Para esto tenemos multiples 
+La capacidad de garantizar que un servicio permanezca disponible largos periodos de tiempo. Para esto tenemos multiples 
 servidores con nuestra aplicacion si algo le pasa a un servidor el otro puede ser usado. Garantizamos 
 que no tenemos un single point of failure. Para llevar a cabo esto usamos un `load balancer`. Lo recomendable 
 para que una app sea considera HA es que tenga 3 instancias de la app en 2 Availability zones
