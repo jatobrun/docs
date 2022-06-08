@@ -137,7 +137,7 @@ es bastante complicado usar vertical scaling con elasticity, se usa en las arqui
 Replicas set son la herramienta para cumplir elasticity
 
 ### Fault tolerance
-La capacidad de prevenir un fallo
+La capacidad de mantenerse activo incluso si existe un fallo
 
 
 ### Disaster recovery (High Durable)
