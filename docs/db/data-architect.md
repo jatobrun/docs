@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# Introduccion 
+# Data Concepts 
 Muchas mas empresas empiezan a tener decisiones basadas en datos 
 por ende las empresas empiezan a tener mas y mas datos los cuales 
 en muchos casos estan en una forma desorganizada. 
@@ -16,29 +16,6 @@ Los arquitectos de datos buscan resolver los problemas de cada una
 de las diferentes areas de la empresa de manera eficiente y unica 
 cumpliendo cada una de sus necesidades.
 
-## StakeHolders
-Es una persona o grupo de personas interesadas en las necesidades 
-del negocio o cualquier dueño de algun producto o servicio que sea 
-importante para la empresa.
-
-Los arquitectos de datos son unos facilitadores o solucionadores 
-de problemas para los stakeholders. Ademas que trabajan juntos.
-
-## Cuando no usarla 
-Como Arquitecto de datos tu tiempo es valioso, la arquitectura de 
-datos es importante es por esto que necesitas saber algunas banderas 
-rojas que debes solucionar antes de entrar en la arquitectura de datos.
-
-- No hay un problema especifico
-- No hay data 
-- El problema no esta alineado al negocio
-- Proyecto con palabras de moda y que no tienen idea de que es lo que dicen
-
-## Cuando usarla
-- Cuando tenemos problemas basados en datos 
-- Cuando el problema cambia de foco 
-- Cuando realizamos upgrades o updates en la organizacion
-
 ## Historia
 
 1. 1970 Codd publica un paper sobre modelamiento de datos de largas entidades 
@@ -49,7 +26,86 @@ financieras
 5. 1989 SQL server
 6. 2006 Big data salio a la luz (Aws y Hadoop)
 
-## Que hace un arquitecto de datos?
+## Introduccion 
+
+- Data: son unidades de informacion que pueden ser representadas por lo que sea, es decir, 
+numeros, fotos, codigo de programacion, musica, etc.
+- Data Documents: Tipos de agrupaciones de la data
+    - DataSets: Tipo de agrupaciones logicas en la que guardamos la data
+    - DataBases: Data estructurada que podemos acceder de forma rapida
+    - DataStore: Lugar para almacenar Data semi estructurada o no estructurada
+    - Data warehouse: Data estructurada o semi estructurada que sirve 
+    para crear reportes y analiticas
+    - Notebooks: La informacion esta ordenada en paginas para consumo facil
+- Data Structures: Data estructurada
+- Data Types: Es una unidad simple de data que le dice al compilador como queremos usar la data
+- Schema: Es una forma de describir la estructura de la data como un blueprint o un template
+- Schemaless: Es cuando un campo puede aceptar varios tipos de datos
+
+:::tip
+Bases de datos schemaless comunes:
+- Key/Value
+- Document
+- Wide Columns
+- Graph
+:::
+
+- query: Es un peticion para consultar datos (read) o realizar alguna operacion (write)
+- querying: La accion de ejecutar un query
+
+:::caution
+Los query no necesariamente esta relacionado con la data sino que tambien podemos hacer 
+tareas de mantenimiento.
+:::
+
+:::note
+- Batch o Streaming => Como queremos mover la data
+- Relacional o no relacional => Como queremos acceder a la data
+    - Data modelling => Como preparamos o diseñamos la data
+        - Schema o schemaless => Como estructuramos la data para su busqueda
+- Data integrity o corruption => Como podemos confiar en la autenticidad de la data
+    - Normalized or denormalized => Tradeamos velocidad vs calidad 
+:::
+
+#### Batch Processing: 
+Cuando enviamos lotes de informacion para ser procesada
+Caracteristicas:
+- Suele estar programada 
+- No esta en real time
+- Suele ser economico
+- ideal para workloads pesados o largos
+
+#### Stream Processing:
+Cuando procesamos la data tan pronto como llega
+Caracteristicas:
+- Suele ser util cuando queremos cosas en tiempo real 
+- Suele ser mas costosa
+
+
+#### StakeHolders
+Es una persona o grupo de personas interesadas en las necesidades 
+del negocio o cualquier dueño de algun producto o servicio que sea 
+importante para la empresa.
+
+Los arquitectos de datos son unos facilitadores o solucionadores 
+de problemas para los stakeholders. Ademas que trabajan juntos.
+
+#### Cuando no usarla 
+Como Arquitecto de datos tu tiempo es valioso, la arquitectura de 
+datos es importante es por esto que necesitas saber algunas banderas 
+rojas que debes solucionar antes de entrar en la arquitectura de datos.
+
+- No hay un problema especifico
+- No hay data 
+- El problema no esta alineado al negocio
+- Proyecto con palabras de moda y que no tienen idea de que es lo que dicen
+
+#### Cuando usarla
+- Cuando tenemos problemas basados en datos 
+- Cuando el problema cambia de foco 
+- Cuando realizamos upgrades o updates en la organizacion
+
+#### Que hace un arquitecto de datos?
 Un arquitecto de datos busca crear la mejor respuesta a las siguientes 
 preguntas:
 
@@ -147,5 +203,8 @@ Que tan rapido necesito que la informacion se refresque?
 - Si es una semana, cada dia o cada mes puedo usar OLAP
 - Si necesito que la informacion se refesque rapido OLTP
 
+## Conceptos
+
+### Que es Data?
 
 
