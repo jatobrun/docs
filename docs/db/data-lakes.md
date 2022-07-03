@@ -2,7 +2,6 @@
 sidebar_position: 4
 ---
 
-# Data Lakes!
+# Data Lakes
 
 Docusaurus can manage multiple versions of your docs.
-

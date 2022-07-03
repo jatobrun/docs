@@ -9,9 +9,10 @@ sidebar_position: 2
 ## Stateless vs Statefull
 
 ## ListView
+
 Basicamente este componente es una lista que nos permite tener rows o distintos campos.
 
-```dart 
+```dart
 Scaffold(
     appBar: AppBar(
         title: const Text('Texto del appbar')
@@ -33,7 +34,7 @@ Scaffold(
 
 Son los campos de una listView de una forma mas estilizada
 
-```dart 
+```dart
 Scaffold(
     appBar: AppBar(
         title: const Text('Texto del appbar'),
@@ -55,7 +56,8 @@ Scaffold(
 
 Podemos recorrer un arreglo y crear un ListTiles por cada elemento dentro del arreglo
 Sin ListTile
-```dart 
+
+```dart
 final options = const['item1', 'item2', 'item3']
 Scaffold(
     appBar: AppBar(
@@ -72,7 +74,8 @@ El operador `...` o tambien conocido como
 :::
 
 Con ListTiles
-```dart 
+
+```dart
 final options = const['item1', 'item2', 'item3']
 Scaffold(
     appBar: AppBar(
@@ -87,8 +90,10 @@ Scaffold(
     )
 );
 ```
+
 Tiene el metodo `onTap:` para agregarle una funcionalidad al darle tap
-```dart 
+
+```dart
 final options = const['item1', 'item2', 'item3']
 Scaffold(
     appBar: AppBar(
@@ -106,16 +111,18 @@ Scaffold(
 ```
 
 ### Constructores
-ListView tiene 2 constructores interesantes `ListView.separated` y `ListView.builder`. El 
+
+ListView tiene 2 constructores interesantes `ListView.separated` y `ListView.builder`. El
 primero crea cada elemento de la ListView con un separador mientras que el segundo hace lo mismo
-que el primero pero no tiene el parametro para agregar el separador. 
+que el primero pero no tiene el parametro para agregar el separador.
 
 :::info
 Usando estos constructores nos ahorramos recorrer el array de elementos
 :::
 
 Usando el constructor `ListView.separated` sin listTile:
-```dart 
+
+```dart
 final options = const['item1', 'item2', 'item3']
 Scaffold(
     appBar: AppBar(
@@ -128,12 +135,14 @@ Scaffold(
       ),
 );
 ```
-:::note 
+
+:::note
 Cuando no estamos utilizando las variables podemos usar `_` para decir que esa variable no se usa
 y para el segundo parametro `__`.
 :::
 
 Usando el constructor `ListView.separated` con listTile:
+
 ```dart
 final options = const['item1', 'item2', 'item3']
 Scaffold(
@@ -152,10 +161,11 @@ Scaffold(
 
 ```
 
-Esto mismo tambien lo podemos hacer utilizando el Widget Column, la diferencia es que el codigo 
+Esto mismo tambien lo podemos hacer utilizando el Widget Column, la diferencia es que el codigo
 se hace muy grande
 
 Sin ListTile
+
 ```dart
 final options = const['item1', 'item2', 'item3']
 Scaffold(
@@ -172,7 +182,9 @@ Scaffold(
 );
 
 ```
+
 Con ListTile
+
 ```dart
 final options = const['item1', 'item2', 'item3']
 Scaffold(
@@ -195,16 +207,21 @@ Scaffold(
 );
 
 ```
+
 Usando el constructor `ListView.builder` sin listTile:
 
 PENDIENTE
 
 ## Card
+
 PENDIENTE
+
 ## Slider
+
 PENDIENTE
 
 ## Navegacion entre Pantallas
+
 Usamos la clase `Navigator.push()` el cual recibe dos parametros `context` y `route`.
 
 ### Crear Route
@@ -217,7 +234,7 @@ final route = MaterialPageRoute(
 Navigator.push(context, route);
 ```
 
-:::info 
+:::info
 Con el metodo `push` obtenemos una navegacion y obtenemos un icono back screen
 :::
 
@@ -228,13 +245,15 @@ final route = MaterialPageRoute(
 );
 Navigator.pushReplacement(context, route);
 ```
-:::info 
-Con el metodo `pushReplacement` no obtenemos una navegacion, por ende no tenemos back screen. 
+
+:::info
+Con el metodo `pushReplacement` no obtenemos una navegacion, por ende no tenemos back screen.
 Este metodo es util cuando queremos implementar un login.
 :::
 
 Con el siguiente comando podemos renderizar las paginas que definimos en el `main.dart`
 en el objeto `routes`.
+
 ```dart
 Navigator.pushNamed(context, 'home');
 ```
@@ -252,16 +271,19 @@ Navigator.pushNamed(context, 'home');
 ### onGenerateRoute
 
 ## Divider
+
 Podemos usar el componente divider lo que es un equivalente a un `<hr>`.
 
 ```dart
 Divider();
 ```
 
-## Buenas practicas 
+## Buenas practicas
+
 ### Imports
+
 Para evitar tener multiples imports en el archivo main que es al final donde queremos renderizar
-nuestras pantallas podemos hacer lo siguiente 
+nuestras pantallas podemos hacer lo siguiente
 
 ```dart title='./lib/screens/screens.dart'
 export 'package:flutter_project/screens/listview.dart';
@@ -276,5 +298,5 @@ void main() => runApp(const MyApp());
 ```
 
 ## Utils
-Podemos usar una extension de `vs code` `Awesome flutter snipets`
 
+Podemos usar una extension de `vs code` `Awesome flutter snipets`
