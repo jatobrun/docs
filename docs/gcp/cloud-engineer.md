@@ -8,8 +8,8 @@ sidebar_position: 2
 
 Google tiene mas de:
 
-- 24 regiones
-- 73 zonas
+- 25 regiones
+- 76 zonas
 - 144 centros de red
 - esta en mas de 200 paises
 
