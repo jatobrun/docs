@@ -669,25 +669,59 @@ Funcionalidades:
 
 - Migrate for compute engine
 
-Cuando queremos migrar maquinas virtuales
+Cuando queremos migrar maquinas virtuales de nuestro sistema actual a la nube (lift and shift)
+
+Ventajas:
+- No sufrimos downtime podemos seguir usando la maquina principal
+- Podemos seguir replicando el hard drive
+- podemos clonar y testear la maquina para saber si funciona como esperabamos
+- podemos desarrollar todas estas tareas de migracion desde la consola
 
 ----
 
 - Migrate for anthos
 
-Cuando queremos migrar contenedores
+Cuando queremos migrar contenedores de diferentes ambientes 
 
+Podemos migrar contenedores de las siguientes plataformas:
+- GKE
+- anthos 
+- anthos cluster vmware
+- anthos cluster aws
+
+:::tip
+Podemos usar la funcionalidad de `auto-generated container artifacts`, ademas no necesitamos 
+tener una suscripcion en anthos para realizar la migracion y si lo migramos a gke es gratis 
+:::
 ----
 
 - Cloud Storage Transfer services
 
-Cuando queremos migrar informacion de buckets con S3
+Cuando queremos migrar informacion desde buckets S3 a cloud storage. Podemos establecer 
+horarios en los que realizamos la transferencia de la informacion de lugares externos a google 
+o incluso lugares internos como de un bucket a otro bucket
+
+Podemos hacer:
+- Mover informacion o crear backups 
+- podemos agendar transferencias unicas o periodicas
+- borrar la informacion que movemos despues de moverla
+- Podemos agendar sincronizaciones periodicas para manter las fuentes de datos al dia
 
 ----
 
 - Transfer appliance
 
-Cuando migramos cantidades masivas de informacion y es mas barato enviar discos duros
+Cuando migramos cantidades masivas de informacion de forma segura 
+
+hay dos configuraciones:
+
+- 100 TB 
+- 480 TB
+
+Casos de uso
+- es mas barato enviar discos duros por avion o barco que por internet
+- tenemos mas de 10TB de informacion
+- demora mas de una semana enviar la informacion por network
 
 ### Types of migrations
 
@@ -712,24 +746,145 @@ Este camino esta dividido en 4 etapas:
 
 1. Assess
 
+Realizar un levantamiento de procesos con el fin de completar lo siguiente:
+
+**Hacer un inventario de la infraestructura**
+Este inventario debe incluir:
+- Especificaciones del hardware que se usa 
+- listado de todas las maquinas que se usan
+- licencias 
+- sistemas operativos
+
+**Entender el funcionamiento de la aplicacion**
+Podemos realizar un catalogo de las aplicaciones para con esto 
+recopular toda la informacion y realizar una matriz entre complejidad y riesgo.
+
+Ademas de identificar dependencias y requerimientos de la aplicacion
+
+**Educar al equipo**
+Asegurarnos que el equipo tiene los conocimientos necesarios de nube para 
+realizar las migraciones ]
+
+**Realizar POC**
+Escoger una de las aplicaciones del catalogo e implementarla con el fin de poner 
+aprueba al equipo antes de ir a un ambiente de produccion
+
+Ademas podemos hacer pruebas de perfomance para establer dichos numeros
+
+**Realizar los calculos del TCO (total cost of ownership)**
+Con la prueba de concepto que se realizo podemos calcular el TCO con el fin de 
+comparar precios y determinar si hay o no una mejoria y de cuanto es
+
+**Escoger la app con menor riesgo y mas sencilla de migrar**
+Finalmente debemos seleccionar la aplicacion que mas facil sea migrar y que no nos 
+represente unos daños grandes al momento de migrar ademas de tener backups o contigencias 
+y luego mirar las siguientes aplicaciones mas complejas 
+
 ----
 
 2. Plan
+Luego de tener levantados los procesos empezamos a realizar la documentacion 
+para la arquitectura y migracion. Este plan debe contar con:
+
+**Establecer servicios y usuarios con sus identidades**
+Buscamos entender cuales son los usuarios y que tipo de cuenta se le va a proveer,
+tenemos las siguientes tipos de cuentas:
+
+- Google accounts: cuenta que identifica a una persona
+- Service accounts: cuenta que suele identificar a los servicios 
+- Google groups: colleciones de cuenta de personas
+- Google workspace domain: Nos permite usar toda la suit de google pero no cloud
+- Cloud identity domains: Nos permite usar gcloud pero no la suit de google
+
+**Desarrollar los recursos que usara la organizacion**
+Organizar los recursos por medio de folder, organizaciones, proyectos. Ademas podemos 
+basarnos y usar una de las siguientes tipo de arquitectura:
+
+- Environment oriented
+- Function oriented
+- Granular access oriented
+
+**Definir los grupos y roles**
+Identificar los roles que necesitaremos para usar los recursos que implementaremos
+
+**Diseñar la topologia de red**
+Ver que topologia nos viene bien para el proyecto tomar en cuenta estos 3 servicios 
+
+- Cloud VPN 
+- Cloud peering
+- Cloud Interconnect
 
 ----
 
 3. Deploy
+Definir prioridades en despliegue. Re ajustar la arquitectura para cumplir 
+con las nuevas necesidades. Desplegar y pulir
+
+**Deploy manual**
+Consideramos hacer un deploy manual porque es el mas sencillo de hacer y porque buscamos 
+ver como funcionan las piezas entre si 
+
+**Usar herramientas de manejo de configuracion**
+Con esto garantizamos que siempre los ambientes o tengan las mismas configuraciones, 
+logramos mejorar nuestra escalabilidad al tener la configuraciones de un ambiente en un 
+script y que una vez este deployada una instancia ejecutamos el script de configuracion y ya 
+
+**Considerar usar orquestacion**
+Hay herramientas como kubernetes que no facilita escalar cosas como los contenedores no dudar 
+en usarlas 
+
+**Despliegues automatizados**
+Incorporar rutinas de CI/CD
+
+**IaC**
+Usar herramientas para levantar infraestructura ademas de tenerlo en un repositorio ayuda entre 
+equipos a provisionar recursos en la nube 
 
 ----
 
 4. Optimize
 
-## AI Services
+Luego de desplegar la infraestructura completamente empezamos a buscar como mejorar 
+dicha arquitectura usando las ventajas entre los diferentes servicios. para reducir costos, 
+incrementar rendimiento, etc.
 
-## Identity and Access
+**Seguir en continua capacitacion**
+Esto con el fin de encontrar servicios nuevos que nos ayuden a mejorar la arquitectura 
+actual 
+
+**Monitorear todo**
+Es importante implementar herramientas de monitoreo para validar que la arquitectura funcione 
+como debe funcionar
+
+**LLevar todo a codigo**
+Aplicando conceptos como infraestructura como codigo y politicas como codigo 
+tenemos ambientes mas reproducibles y auditables
+
+**Usar servicios manejados por google**
+Al usar servicios manejados por google nos libramos de mucha carga de trabajo
+
+**Mejorar performance y escalabilidad**
+aplicar conceptops como escalamiento vertical u horizontal depende del caso de uso 
+mejoraria nuestra arquitectura.
+
+**Mejoras en precios**
+Buscar implementar o que nuestra arquitectura cumpla con los requerimientos que pide google 
+para solicitar codigos de descuentos. Existen los siguientes:
+
+- Sustained use discount
+- commited use contracts
+- flat rate princing
+
+## AI Services
 
 ## Security
 
-## Compliance
+## Identity and Access
+
+## Support 
 
 ## Billing
+
+## Pricing
+
+## Resource Hierarchy
