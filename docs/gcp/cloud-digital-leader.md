@@ -877,9 +877,203 @@ para solicitar codigos de descuentos. Existen los siguientes:
 
 ## AI Services
 
+### Vertex AI
+Es la plataforma unificada entre AI platform y Auto ML para machine learning y deep learning integra las siguientes 
+funcionalidades:
+1. Data readiness
+2. Feature engineering
+3. Training / HT Parameters
+4. Model serving
+5. Understanding Tuning
+6. Edge
+7. Model monitoring
+8. Model management
+
+Desde el paso 1 al 5 podemos usar `AutoML`, ademas que podemos automatizar todos los pasos 
+con pipelines lo que se conoce como `MLops`.
+
+Tambien tenemos notebooks y maquinas con gpu para deep learning
+
+#### Environments 
+
+Necesitaremos crear nuestros entornos para poder desarollo vertex ai lo permite pero debemos tener claro 
+3 funcionalidades importantes a la hora de setear nuestro ambiente segun nuestras necesidades:
+
+1. Deep Learning Vm images: estas imagenes estan optimizadas para tareas de data science o ml 
+
+2. Deep Learning container: estos contenedores estan seteados para tareas con deep learning
+
+3. Cloud GPU: como las gpus son caras podemos usar este servicio para usar gpus fraccionadas
+
+### AI Services
+
+1. Vision AI: Obtiene descubrimientos de imagenes o videos
+2. Video AI: Para crear experiencias de video
+3. Natural language API: Da insigths del texto
+4. REcomendation AI: Para crear catalogos personalizados
+5. Translation: Traduce entre lenguajes
+6. Talent Solution: Analiza postulaciones laborales
+7. Document AI: Para revisar documentos
+8. Agent asist: Para dar asistencia telefonica
+9. DialogFlow: crear interfaces para realizar conversaciones tipo chat bots
+10. Text to speech: covierte lo que escribimos en lectura
+11. speech to text: covierte lo que hablamos en texto
+
 ## Security
 
+### Identity Services
+
+1. IAM: Para manejar roles y permisos en google cloud de forma muy granular
+2. Cloud identity: Podemos manejar usuarios, aplicaciones, desde la consola
+3. Identity Platform: Para agregarle un grado de identidad y acceso a nuestras aplicaciones
+4. Beyond Corp: Zero trust solution nos agregar data and threat protection
+5. Identity-Aware Proxy: Forma para conectarnos de forma segura a nuestas vms
+6. Security key enforcement: Forzar usar security keys para impedir la apropiacion de cuentas
+7. cloud data loss prevention:
+8. Security command center: es la plataforma de google donde centralizas seguiridad y riesgos con
+assest discoverym threat protection y prevention
+
+#### Features
+
+1. Resource Manager: Para manejar recursos en gcp
+2. Managed services for microsoft active directory: para el activde directory
+3. Titan security keys: security keys hechas por google para evitar los pishings
+4. Acess transparency:
+5. binary authorization:
+6. cloud assets inventory:
+7. cloud audit logs:
+8. shielded vms:
+9. Cloud hsm:
+10. vpc service controls:
+11. incident response manager:
+
+### Secure by design
+
+**Seguridad operacional y dispositivos**
+- usan practicas de seguridad muy estrictas para desplegar software
+- Equipo operacional destinado a responder sobre threats 24/7/356
+
+**Comunicaciones de internet**
+- Todas las comunicaciones sobre internet se encriptan en transito
+- Tienen muchas capas en su red para defender del DDos
+
+**Identidad**
+- Autenticacion fuerte
+- La informacion confidencial o snsible esta protegida con llaves de seguridad
+
+**Servicios de almanceamiento**
+- La informacion guarda se encripta at rest
+- Proteccion frente accessos no autorizados o interrupcion de servicios
+
+**Despliegue de servicios**
+- Cada aplicacion que se despliega fue construida pensando en que sea segura
+- No se asume confianza entre servicios crean multiples formas de garantizar dicha confianza
+- La infraestructura es diseñada desde el principio para que sea multi tenant
+
+**Infraestructura en hardware**
+- Todos los dispositivos que se usan estan debidamente protegidos con todas las politicas y estandares
+
+**Datacenters**
+- Tienen multiples features praa seguridad como monitoreo de camaras, tarjetas de acessos, alarmas, detectores 
+de metal, etc.
+
+
+#### Compliance Reports manager
+
+Esta es una seccion de google que nos permite ver todos las certificaciones que tiene de compliance, 
+podemos descargar los pdf y usarlo para nuestras auditorias o como seguridad de que cumple 
+tal estandard
+
+### Privacy
+
+1. Nosotros controlamos nuestra informacion no google
+2. Google no usa nuestra inforamcion para ads
+3. Google es transparente con la informacion que recolecta y como la usa 
+4. Google nunca vendera nuestra informacion a otras entidades 
+5. Seguridad y privacidad son sus principios para desarollar todos sus productos
+
+### Transparency 
+
+1. Google no es dueño de tu informacion, solo tu eres el dueño de tu informacion
+2. Google no vende informacion a otras entidades
+3. Google no usa tu informacion para marketing
+4. Toda la informacion esta encriptada por defecto 
+5. Google protege la informacion
+6. Google no le da acesso a la informacion ni al gobierno
+
 ## Identity and Access
+
+### Cloud identity
+
+Es un servicio de google que funciona como IaaS (Identity as a service) y basicamente sirve para identificar 
+cuentas entre recursos. Con este servicio podemos centralizar a todos los usuarios
+
+Funcionalidades:
+- User lifecycle management
+- Account security
+- Single sign-on
+- cloud directory
+- Device management
+- Reporting and analytics
+- App management
+- Extensible apis 
+
+Podemos validar dichas identidades entre diferentes servicios como:
+- google cloud 
+- azure directory 
+- Azure activate directory 
+
+:::tip
+Usamos cloud identity cuando nuestros empleados o clientes no usan cuenta de gmail
+:::
+
+Existen dos versiones de cloud identity `free` y `premium`
+
+### Active directory
+
+#### Terminology 
+
+- Domain: Es una base de datos donde almancenamos los AD objects 
+
+- Domain controller: Es el servidor que autentica y autoriza a los ad objects
+
+- AD Object: es el elemento basico de un activate directory ejem. computadoras, personas, grupos, carpetas
+
+- Domain computer: una computadora que esta registrada como una unidad con una base de datos central
+
+- Group policy object: El grupo de permisos, esto nos dice que puede hacer el ad object
+
+- organization units: es una subdivision de active directory para organizar ad objects
+
+- Directory service: permite almacenar la informacion del active directory y compartirla en red
+
+#### Managed service for microsoft active directory  
+
+Es un active directory hosteado en google 
+
+### Identity Providers
+
+Son intermediarions que mantienen y almacenan informacion para que los usuarios se autentiquen y autoricen 
+al momento de usar aplicaciones. Los identity providers certificados son Google, Amazon, Facebook, github, etc.
+
+Basicamente con este feature puedes hacer login en otras plataformas sin tener una cuenta creada.
+
+#### Protocols 
+
+Para esto los identity providers usan diferentes protocolos que ya son estandares para comunicarse entre si. 
+
+##### OpenID
+
+Estandar abierto y protocolo de autenticacion descentralizado. OpenID nos dice quienes somos
+
+##### OAuth2.0
+
+Estandar de la industria que usa tokens para identificarnos y nos dice que podemos hacer 
+
+##### SAML
+
+Security Assertion Markup Language es un estandard abierto que nos autentica y autoriza entre el el identity 
+provider y el service provider se usa mucho para hacer Single sign on en los navegadores
 
 ## Support 
 
