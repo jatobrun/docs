@@ -672,6 +672,7 @@ Funcionalidades:
 Cuando queremos migrar maquinas virtuales de nuestro sistema actual a la nube (lift and shift)
 
 Ventajas:
+
 - No sufrimos downtime podemos seguir usando la maquina principal
 - Podemos seguir replicando el hard drive
 - podemos clonar y testear la maquina para saber si funciona como esperabamos
@@ -681,28 +682,30 @@ Ventajas:
 
 - Migrate for anthos
 
-Cuando queremos migrar contenedores de diferentes ambientes 
+Cuando queremos migrar contenedores de diferentes ambientes
 
 Podemos migrar contenedores de las siguientes plataformas:
+
 - GKE
-- anthos 
+- anthos
 - anthos cluster vmware
 - anthos cluster aws
 
 :::tip
-Podemos usar la funcionalidad de `auto-generated container artifacts`, ademas no necesitamos 
-tener una suscripcion en anthos para realizar la migracion y si lo migramos a gke es gratis 
+Podemos usar la funcionalidad de `auto-generated container artifacts`, ademas no necesitamos
+tener una suscripcion en anthos para realizar la migracion y si lo migramos a gke es gratis
 :::
 ----
 
 - Cloud Storage Transfer services
 
-Cuando queremos migrar informacion desde buckets S3 a cloud storage. Podemos establecer 
-horarios en los que realizamos la transferencia de la informacion de lugares externos a google 
+Cuando queremos migrar informacion desde buckets S3 a cloud storage. Podemos establecer
+horarios en los que realizamos la transferencia de la informacion de lugares externos a google
 o incluso lugares internos como de un bucket a otro bucket
 
 Podemos hacer:
-- Mover informacion o crear backups 
+
+- Mover informacion o crear backups
 - podemos agendar transferencias unicas o periodicas
 - borrar la informacion que movemos despues de moverla
 - Podemos agendar sincronizaciones periodicas para manter las fuentes de datos al dia
@@ -711,14 +714,15 @@ Podemos hacer:
 
 - Transfer appliance
 
-Cuando migramos cantidades masivas de informacion de forma segura 
+Cuando migramos cantidades masivas de informacion de forma segura
 
 hay dos configuraciones:
 
-- 100 TB 
+- 100 TB
 - 480 TB
 
 Casos de uso
+
 - es mas barato enviar discos duros por avion o barco que por internet
 - tenemos mas de 10TB de informacion
 - demora mas de una semana enviar la informacion por network
@@ -750,40 +754,41 @@ Realizar un levantamiento de procesos con el fin de completar lo siguiente:
 
 **Hacer un inventario de la infraestructura**
 Este inventario debe incluir:
-- Especificaciones del hardware que se usa 
+
+- Especificaciones del hardware que se usa
 - listado de todas las maquinas que se usan
-- licencias 
+- licencias
 - sistemas operativos
 
 **Entender el funcionamiento de la aplicacion**
-Podemos realizar un catalogo de las aplicaciones para con esto 
+Podemos realizar un catalogo de las aplicaciones para con esto
 recopular toda la informacion y realizar una matriz entre complejidad y riesgo.
 
 Ademas de identificar dependencias y requerimientos de la aplicacion
 
 **Educar al equipo**
-Asegurarnos que el equipo tiene los conocimientos necesarios de nube para 
+Asegurarnos que el equipo tiene los conocimientos necesarios de nube para
 realizar las migraciones ]
 
 **Realizar POC**
-Escoger una de las aplicaciones del catalogo e implementarla con el fin de poner 
+Escoger una de las aplicaciones del catalogo e implementarla con el fin de poner
 aprueba al equipo antes de ir a un ambiente de produccion
 
 Ademas podemos hacer pruebas de perfomance para establer dichos numeros
 
 **Realizar los calculos del TCO (total cost of ownership)**
-Con la prueba de concepto que se realizo podemos calcular el TCO con el fin de 
+Con la prueba de concepto que se realizo podemos calcular el TCO con el fin de
 comparar precios y determinar si hay o no una mejoria y de cuanto es
 
 **Escoger la app con menor riesgo y mas sencilla de migrar**
-Finalmente debemos seleccionar la aplicacion que mas facil sea migrar y que no nos 
-represente unos daños grandes al momento de migrar ademas de tener backups o contigencias 
-y luego mirar las siguientes aplicaciones mas complejas 
+Finalmente debemos seleccionar la aplicacion que mas facil sea migrar y que no nos
+represente unos daños grandes al momento de migrar ademas de tener backups o contigencias
+y luego mirar las siguientes aplicaciones mas complejas
 
 ----
 
 2. Plan
-Luego de tener levantados los procesos empezamos a realizar la documentacion 
+Luego de tener levantados los procesos empezamos a realizar la documentacion
 para la arquitectura y migracion. Este plan debe contar con:
 
 **Establecer servicios y usuarios con sus identidades**
@@ -791,13 +796,13 @@ Buscamos entender cuales son los usuarios y que tipo de cuenta se le va a provee
 tenemos las siguientes tipos de cuentas:
 
 - Google accounts: cuenta que identifica a una persona
-- Service accounts: cuenta que suele identificar a los servicios 
+- Service accounts: cuenta que suele identificar a los servicios
 - Google groups: colleciones de cuenta de personas
 - Google workspace domain: Nos permite usar toda la suit de google pero no cloud
 - Cloud identity domains: Nos permite usar gcloud pero no la suit de google
 
 **Desarrollar los recursos que usara la organizacion**
-Organizar los recursos por medio de folder, organizaciones, proyectos. Ademas podemos 
+Organizar los recursos por medio de folder, organizaciones, proyectos. Ademas podemos
 basarnos y usar una de las siguientes tipo de arquitectura:
 
 - Environment oriented
@@ -808,67 +813,67 @@ basarnos y usar una de las siguientes tipo de arquitectura:
 Identificar los roles que necesitaremos para usar los recursos que implementaremos
 
 **Diseñar la topologia de red**
-Ver que topologia nos viene bien para el proyecto tomar en cuenta estos 3 servicios 
+Ver que topologia nos viene bien para el proyecto tomar en cuenta estos 3 servicios
 
-- Cloud VPN 
+- Cloud VPN
 - Cloud peering
 - Cloud Interconnect
 
 ----
 
 3. Deploy
-Definir prioridades en despliegue. Re ajustar la arquitectura para cumplir 
+Definir prioridades en despliegue. Re ajustar la arquitectura para cumplir
 con las nuevas necesidades. Desplegar y pulir
 
 **Deploy manual**
-Consideramos hacer un deploy manual porque es el mas sencillo de hacer y porque buscamos 
-ver como funcionan las piezas entre si 
+Consideramos hacer un deploy manual porque es el mas sencillo de hacer y porque buscamos
+ver como funcionan las piezas entre si
 
 **Usar herramientas de manejo de configuracion**
-Con esto garantizamos que siempre los ambientes o tengan las mismas configuraciones, 
-logramos mejorar nuestra escalabilidad al tener la configuraciones de un ambiente en un 
-script y que una vez este deployada una instancia ejecutamos el script de configuracion y ya 
+Con esto garantizamos que siempre los ambientes o tengan las mismas configuraciones,
+logramos mejorar nuestra escalabilidad al tener la configuraciones de un ambiente en un
+script y que una vez este deployada una instancia ejecutamos el script de configuracion y ya
 
 **Considerar usar orquestacion**
-Hay herramientas como kubernetes que no facilita escalar cosas como los contenedores no dudar 
-en usarlas 
+Hay herramientas como kubernetes que no facilita escalar cosas como los contenedores no dudar
+en usarlas
 
 **Despliegues automatizados**
 Incorporar rutinas de CI/CD
 
 **IaC**
-Usar herramientas para levantar infraestructura ademas de tenerlo en un repositorio ayuda entre 
-equipos a provisionar recursos en la nube 
+Usar herramientas para levantar infraestructura ademas de tenerlo en un repositorio ayuda entre
+equipos a provisionar recursos en la nube
 
 ----
 
 4. Optimize
 
-Luego de desplegar la infraestructura completamente empezamos a buscar como mejorar 
-dicha arquitectura usando las ventajas entre los diferentes servicios. para reducir costos, 
+Luego de desplegar la infraestructura completamente empezamos a buscar como mejorar
+dicha arquitectura usando las ventajas entre los diferentes servicios. para reducir costos,
 incrementar rendimiento, etc.
 
 **Seguir en continua capacitacion**
-Esto con el fin de encontrar servicios nuevos que nos ayuden a mejorar la arquitectura 
-actual 
+Esto con el fin de encontrar servicios nuevos que nos ayuden a mejorar la arquitectura
+actual
 
 **Monitorear todo**
-Es importante implementar herramientas de monitoreo para validar que la arquitectura funcione 
+Es importante implementar herramientas de monitoreo para validar que la arquitectura funcione
 como debe funcionar
 
 **LLevar todo a codigo**
-Aplicando conceptos como infraestructura como codigo y politicas como codigo 
+Aplicando conceptos como infraestructura como codigo y politicas como codigo
 tenemos ambientes mas reproducibles y auditables
 
 **Usar servicios manejados por google**
 Al usar servicios manejados por google nos libramos de mucha carga de trabajo
 
 **Mejorar performance y escalabilidad**
-aplicar conceptops como escalamiento vertical u horizontal depende del caso de uso 
+aplicar conceptops como escalamiento vertical u horizontal depende del caso de uso
 mejoraria nuestra arquitectura.
 
 **Mejoras en precios**
-Buscar implementar o que nuestra arquitectura cumpla con los requerimientos que pide google 
+Buscar implementar o que nuestra arquitectura cumpla con los requerimientos que pide google
 para solicitar codigos de descuentos. Existen los siguientes:
 
 - Sustained use discount
@@ -878,8 +883,10 @@ para solicitar codigos de descuentos. Existen los siguientes:
 ## AI Services
 
 ### Vertex AI
-Es la plataforma unificada entre AI platform y Auto ML para machine learning y deep learning integra las siguientes 
+
+Es la plataforma unificada entre AI platform y Auto ML para machine learning y deep learning integra las siguientes
 funcionalidades:
+
 1. Data readiness
 2. Feature engineering
 3. Training / HT Parameters
@@ -889,17 +896,17 @@ funcionalidades:
 7. Model monitoring
 8. Model management
 
-Desde el paso 1 al 5 podemos usar `AutoML`, ademas que podemos automatizar todos los pasos 
+Desde el paso 1 al 5 podemos usar `AutoML`, ademas que podemos automatizar todos los pasos
 con pipelines lo que se conoce como `MLops`.
 
 Tambien tenemos notebooks y maquinas con gpu para deep learning
 
-#### Environments 
+#### Environments
 
-Necesitaremos crear nuestros entornos para poder desarollo vertex ai lo permite pero debemos tener claro 
+Necesitaremos crear nuestros entornos para poder desarollo vertex ai lo permite pero debemos tener claro
 3 funcionalidades importantes a la hora de setear nuestro ambiente segun nuestras necesidades:
 
-1. Deep Learning Vm images: estas imagenes estan optimizadas para tareas de data science o ml 
+1. Deep Learning Vm images: estas imagenes estan optimizadas para tareas de data science o ml
 
 2. Deep Learning container: estos contenedores estan seteados para tareas con deep learning
 
@@ -950,54 +957,60 @@ assest discoverym threat protection y prevention
 ### Secure by design
 
 **Seguridad operacional y dispositivos**
+
 - usan practicas de seguridad muy estrictas para desplegar software
 - Equipo operacional destinado a responder sobre threats 24/7/356
 
 **Comunicaciones de internet**
+
 - Todas las comunicaciones sobre internet se encriptan en transito
 - Tienen muchas capas en su red para defender del DDos
 
 **Identidad**
+
 - Autenticacion fuerte
 - La informacion confidencial o snsible esta protegida con llaves de seguridad
 
 **Servicios de almanceamiento**
+
 - La informacion guarda se encripta at rest
 - Proteccion frente accessos no autorizados o interrupcion de servicios
 
 **Despliegue de servicios**
+
 - Cada aplicacion que se despliega fue construida pensando en que sea segura
 - No se asume confianza entre servicios crean multiples formas de garantizar dicha confianza
 - La infraestructura es diseñada desde el principio para que sea multi tenant
 
 **Infraestructura en hardware**
+
 - Todos los dispositivos que se usan estan debidamente protegidos con todas las politicas y estandares
 
 **Datacenters**
-- Tienen multiples features praa seguridad como monitoreo de camaras, tarjetas de acessos, alarmas, detectores 
-de metal, etc.
 
+- Tienen multiples features praa seguridad como monitoreo de camaras, tarjetas de acessos, alarmas, detectores
+de metal, etc.
 
 #### Compliance Reports manager
 
-Esta es una seccion de google que nos permite ver todos las certificaciones que tiene de compliance, 
-podemos descargar los pdf y usarlo para nuestras auditorias o como seguridad de que cumple 
+Esta es una seccion de google que nos permite ver todos las certificaciones que tiene de compliance,
+podemos descargar los pdf y usarlo para nuestras auditorias o como seguridad de que cumple
 tal estandard
 
 ### Privacy
 
 1. Nosotros controlamos nuestra informacion no google
 2. Google no usa nuestra inforamcion para ads
-3. Google es transparente con la informacion que recolecta y como la usa 
-4. Google nunca vendera nuestra informacion a otras entidades 
+3. Google es transparente con la informacion que recolecta y como la usa
+4. Google nunca vendera nuestra informacion a otras entidades
 5. Seguridad y privacidad son sus principios para desarollar todos sus productos
 
-### Transparency 
+### Transparency
 
 1. Google no es dueño de tu informacion, solo tu eres el dueño de tu informacion
 2. Google no vende informacion a otras entidades
 3. Google no usa tu informacion para marketing
-4. Toda la informacion esta encriptada por defecto 
+4. Toda la informacion esta encriptada por defecto
 5. Google protege la informacion
 6. Google no le da acesso a la informacion ni al gobierno
 
@@ -1005,10 +1018,11 @@ tal estandard
 
 ### Cloud identity
 
-Es un servicio de google que funciona como IaaS (Identity as a service) y basicamente sirve para identificar 
+Es un servicio de google que funciona como IaaS (Identity as a service) y basicamente sirve para identificar
 cuentas entre recursos. Con este servicio podemos centralizar a todos los usuarios
 
 Funcionalidades:
+
 - User lifecycle management
 - Account security
 - Single sign-on
@@ -1016,12 +1030,13 @@ Funcionalidades:
 - Device management
 - Reporting and analytics
 - App management
-- Extensible apis 
+- Extensible apis
 
 Podemos validar dichas identidades entre diferentes servicios como:
-- google cloud 
-- azure directory 
-- Azure activate directory 
+
+- google cloud
+- azure directory
+- Azure activate directory
 
 :::tip
 Usamos cloud identity cuando nuestros empleados o clientes no usan cuenta de gmail
@@ -1031,9 +1046,9 @@ Existen dos versiones de cloud identity `free` y `premium`
 
 ### Active directory
 
-#### Terminology 
+#### Terminology
 
-- Domain: Es una base de datos donde almancenamos los AD objects 
+- Domain: Es una base de datos donde almancenamos los AD objects
 
 - Domain controller: Es el servidor que autentica y autoriza a los ad objects
 
@@ -1049,18 +1064,18 @@ Existen dos versiones de cloud identity `free` y `premium`
 
 #### Managed service for microsoft active directory  
 
-Es un active directory hosteado en google 
+Es un active directory hosteado en google
 
 ### Identity Providers
 
-Son intermediarions que mantienen y almacenan informacion para que los usuarios se autentiquen y autoricen 
+Son intermediarions que mantienen y almacenan informacion para que los usuarios se autentiquen y autoricen
 al momento de usar aplicaciones. Los identity providers certificados son Google, Amazon, Facebook, github, etc.
 
 Basicamente con este feature puedes hacer login en otras plataformas sin tener una cuenta creada.
 
-#### Protocols 
+#### Protocols
 
-Para esto los identity providers usan diferentes protocolos que ya son estandares para comunicarse entre si. 
+Para esto los identity providers usan diferentes protocolos que ya son estandares para comunicarse entre si.
 
 ##### OpenID
 
@@ -1068,14 +1083,14 @@ Estandar abierto y protocolo de autenticacion descentralizado. OpenID nos dice q
 
 ##### OAuth2.0
 
-Estandar de la industria que usa tokens para identificarnos y nos dice que podemos hacer 
+Estandar de la industria que usa tokens para identificarnos y nos dice que podemos hacer
 
 ##### SAML
 
-Security Assertion Markup Language es un estandard abierto que nos autentica y autoriza entre el el identity 
+Security Assertion Markup Language es un estandard abierto que nos autentica y autoriza entre el el identity
 provider y el service provider se usa mucho para hacer Single sign on en los navegadores
 
-## Support 
+## Support
 
 ## Billing
 
