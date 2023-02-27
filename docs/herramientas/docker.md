@@ -302,8 +302,9 @@ lo cual en muchos casos suele ser tedioso.
 
 ## Docker Compose
 
-Docker compose es una forma facil de escribir todos los comandos de docker en un solo archivo y
-que sea mas facil de entender y administrar. Esta herramienta es util cuando debemos manejar muchas
+Docker compose es una forma facil de automatizar multiples docker
+images entre diferentes ambientes en un solo server lo cual es facil
+de administrar. Esta herramienta es util cuando debemos manejar muchas
 aplicaciones y estar levantando cada uno de los contenedores se vuelve una tarea tediosa.
 
 ### Instalacion

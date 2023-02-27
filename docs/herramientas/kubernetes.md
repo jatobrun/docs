@@ -105,12 +105,11 @@ Esto normalmente esta dentro del namespace `kubesystem`
 
 Se encarga de ejecutar las apps y tenemos los siguientes elemento dentro de estos:
 
-1. Api server
-2. kubelet
-3. Kube Proxy
-4. Container runtime
-5. iptables
-6. pods and containers
+1. kubelet
+2. Kube Proxy
+3. Container runtime
+4. iptables
+5. pods and containers
 
 ## Contextos
 
@@ -317,6 +316,10 @@ tenemos 3 tipos de scope:
 Es una forma para seleccionar varios recursos dentro de kubernetes.
 Existen 3 tipos de selectores:
 
+1. `label selector` Selecciona los recursos usando un label (el mas importante)
+2. `field selector` Selecciona los recusos usando la metadata
+3. `node selector` Selecciona nodos para pods
+
 ### label selector
 
 Selecciona los recursos de k8s usando su label. Los labels son de `key:value` y estos se encuentran
@@ -380,9 +383,6 @@ Para matchear las labels selector con diferentes servicios o replicas set debemo
 recurrir a la documentacion debido a que cada recurso en kubernetes tiene una forma
 distinta de matchear los label por ejemplo en servicios se usa la palabra `selector`
 pero en replicaset se usa `matchLabels`.
-
-2. `field selector` Selecciona los recusos usando la metadata
-3. `node selector` Selecciona nodos para pods
 
 ### Annotations
 
@@ -599,17 +599,30 @@ Si existe un PV que cumple dichas caracteristicas se hace un match y un bind
 
 ### Configmaps
 
+Lo usamos para almacenar informacion no confidencial y en formato `key-value` pair.
+
+Casos de uso:
+
+- Variables de entorno
+- Argumentos para la linea de comandos
+- Archivos de configuracion
+
 ## Pods
 
 Es un set de contenedores, este set puede tener uno o varios contenedores pero normalmente
 un pod contiene un contenedor.
+
+Los pods poseen su propia ip y los contenedores dentro de un pod puede comunicarse por medio de localhost, normalmente cada contenedor deberia estar en un puerto diferente. Cuando un pod muere obtiene otra ip, por
+eso es necesario usar servicios para comunicar pods entre ellos
+
+Cada pod puede tener un volumen de almacenamiento compartido con los contenedores que tiene
 
 :::info
 El `hash` que tiene cada uno de los pods es generado por el template de deployment
 :::
 
 Podemos usar `kubectl get pods` para obtener los pods, ademas podemos usar `kubectl get pods -o wide`
-para tener una informacion mas detallada sobre los pods.
+para tener una informacion mas detallada sobre los pods como la ip.
 
 ### Manifiestos de pods
 
@@ -880,13 +893,26 @@ spec:
 ## Deployments
 
 Es un template para crear un pod. Ademas tiene un conjunto de reglas y etiquetas para
-manejar dichos pods.
+manejar dichos pods. Podemos cambiar el deployment controller default por ArgoCD, Flux, Jenkin X, etc.
 
-### Replicas
+### Replicas Set
 
 Son la cantidad de pods que queremos en nuestro deployment, es decir, que si borramos un pod
 kubernetes instantaneamente creara uno de vuelta ya que siempre va a tratar de tener la cantidad
-de pods que especificamos en el numero de replicas.
+de pods que especificamos en el numero de replicas, esto nos garantiza un numero disponible de pods.
+
+:::note
+El campo *metada.ownerReference* determina el link entre el pod y el replicaset
+:::
+
+:::warning
+No es recomendado crear replicas set, debido a que si las asociamos a un pod y luego la borramos se ira.
+Si usamos deployments aunque borremos el replica set por error el deployment creara un replica set de nuevo
+:::
+
+:::tip
+Podemos usar HPA (Horizontal Pod Autoscaler) para autoescalar el replica set
+:::
 
 ### Manifiesto
 
@@ -1030,6 +1056,12 @@ los estados de los workers
 
 4. Cada nodo tiene su propia ip
 
+:::note
+CNI(Container network interface)
+Es el standard que usa kubernetes para comunicarse, si queremos crear una plugin debemos
+seguir dicho estandard
+:::
+
 ### Tipos de networking
 
 Existen 4 tipos de comunicacion en las  redes dentro de los clusters:
@@ -1118,10 +1150,10 @@ usa los servicios de k8s
 - podemos usar el load balancer service el cual es de tipo capa 4 (TCP/UDP)
 - mientras que el ingress es un load balancer de capa 4 o capa 7
 
-### Servicios
+### Services
 
 Los servicios en kubernetes son una forma de poder contactar un set de pods ya sea desde adentro
-del cluster o desde afuera, por medio de una direccion que se mantiene incluso si el pod muere
+del cluster o desde afuera, por medio de una registro DNS y una direccion IP estatica que se mantiene incluso si el pod muere
 
 Utilizaremos como base este manifiesto de deployment
 
@@ -1342,6 +1374,73 @@ para ver la ip de los CNAMES
 Que es FQDN?
 Es lo que se conoce como absolute domain el cual es la ubicacion exacta en el
 arbol de jerarquia.
+:::
+
+### ip tables
+
+Es una utilidad que tiene linux, la cual permite al administrador configurar la ip por medio de
+reglas, es decir, hace la funcion de firewall
+
+- `iptables` lo usamos para IPV4
+- `ip6tables` lo usamos para IPV6
+
+```
+iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
+```
+
+Tambien podemos visualizar todas las reglas que tenemos con
+
+```
+iptables -L 
+```
+
+#### IPVS
+
+El problema que tenemos con iptables es que solo escala hasta 5000 nodos por cluster, este problema lo resuelve IPVS debido a que usa hash tables, en el futuro Kubeproxy hara que IPVS se use por default
+
+### Proxy
+
+Es una aplicacion que actua como intermediario entre el cliente que necesita el recurso y el server
+que provee el recurso. En kubernetes tenemos varios proxies los cuales son:
+
+- Kubectl Proxy: Proxy desde localhost hacia kubernetes apiserver
+- Apiserver Proxy: Conecta un usuario dentro del cluster hacia uno fuera
+- Kube proxy: se ejecuta en cada nodos nos permite encontrar los servicios
+- Proxy/load balancer: actua como load balancer si hay varios api server
+- Cloud load balancer: para trafico externo que necesite el pod
+
+Existen dos tipos de proxies
+
+1. Forward proxy: Fuerza a que todo el trafico de salida pase por el
+2. Reverse proxy: Fuerza a que todo el trafico de entrada pase por el
+
+#### Kube Proxy
+
+Es un proxy de tipo red que se ejecuta en todos los nodos no solo en los worker nodes.
+Es el encargado de gestioanr el trafico hacia los pods, ademas de las reglas de red (iptables)
+
+Kube proxy se ejecuta en 3 modos:
+
+1. Iptables(default)
+2. IPVS(el nuevo default)
+3. Userspace(deprecated)
+
+### Service Mesh
+
+Es una aplicacion que maneja la comunicacion dentro de nuestra aplicacion (basada en microservicios)
+
+Lo que puede hacer:
+
+- Reliability (Load balancing, retries, Manejo del trafico)
+- Observability (Metricas, y traces)
+- Security (Certificados TLS, Identidad)
+
+Usamos un service mesh control plane que es el encargado de instalas y configurar un proxy dentro de cada
+uno de nuestros pods. Este proxy se conecta al pod usando el patron `sidecar` por donde todo el trafico
+que tiene el pod pasa por el proxy y por este realiza la encriptacion o aplica las reglas configurada en el control plane
+
+:::note
+No es necesario usar un serviche mesh pero por norma general en todo los ambientes de produccion los deberiamos usar
 :::
 
 ## ConfigMaps

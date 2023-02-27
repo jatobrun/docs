@@ -590,6 +590,14 @@ pero si los procesos.
 
 Con este servicio de google controlamos Quien (identity), tiene tal acceso (Role), en tal recurso
 
+:::note
+Principle of least privilege
+
+Este principio  nos dice que debemos darle la menor cantidad de persmisos necesarios a la persona, es decir,
+otorgarle la cantidad necesaria de permisos  y no mas.
+
+:::
+
 ### Policy Architecture
 
 Una policy esta formada por:
@@ -597,3 +605,103 @@ Una policy esta formada por:
 1. bindings
 2. metadata
 3. audit config
+
+#### Bindings
+
+Los bindings se dividen en:
+
+- members
+- role
+- conditions
+
+##### Members
+
+Es una identidad que puede acceder a un recurso, estas pueden ser:
+
+- user: Usando una cuenta de gmail o cualquier cuenta asociada a gmail
+- service accounts: Son las cuentas de servicio que usan las aplicaciones para autenticarse
+- groups: Los google groups son agrupaciones de cuentas gmail o service accounts, la cual si agregamos a nuevo miembro este hereda todos los permisos del grupo
+- g suite domain: Como google groups pero bajo una organizacion
+- cloud identity domain: Como g suite pero  no tiene acceso a g suite
+- AllAuthenticatedUsers: son todos los usuarios o service accounts en el internet que estan autenticados con una cuenta de google
+- AllUsers: son todos los usarios que estan en el internet ya sea autenticados o no
+
+:::note
+tanto gsuite domains como google groups no permiten autenticacion sino son formas de manejar los permisos de multiples usuarios
+de una forma mas sencilla
+:::
+
+##### Roles
+
+Puntos importantes sobre los roles:
+
+- los roles son coleccion de permisos
+- los roles se los podemos asignar a un usuario, a un service account, o a un grupo
+- los permisos determinan que operaciones estan permitadas en que recursos
+- los permisos en muchos ocasiones tienen una relacion 1-1 con los metodos REST
+
+:::caution
+los permisos no se asignan directamente a los usuarios sino los roles los cuales contienen uno o mas permisos
+:::
+
+Ejemplo de un permiso
+
+```bash
+compute.instance.list
+```
+
+Como podemos observar en el ejemplo los permisos tienen el siguiente forma `service.resource.verb`
+
+###### Tipos de permisos
+
+- Primitive: Estos roles existian antes de IAM, estan divididos en 3 Owner -> Editor -> Viewer, donde el
+Editor tiene los permisos de Viewer y el Owner tiene los permisos de Editor  y del Viewer. Solo es posible asignar el role de Owner por medio de la consola
+- Predefined: Con estos roles tenemos mas control sobre los permisos que se le otorgan al usuario, se prefiere usar estos roles predefined que los primitive,
+estos roles son mantenidos y creados por google, esto implica que cuando se agregan nuevos features estos roles se actualizan
+- Custom: Estos roles estan creados por los usuarios y nos permite agrupar diferentes permisos en una sola. No los maneja google por ende si tenemos un nuevo
+feature este rol no se actualiza automaticamente, estos roles se crean a project u organization level no folder
+
+:::caution
+Google recomienda que nunca se use los roles primitivos, no es una buena practica.
+Existen algunos permisos en los predefined roles que no se pueden agregar a los custom roles
+:::
+
+:::tip
+la forma correcta de manejar roles y permisos es crear un grupo por area agregar a los miembros del area al grupo y despues agregar a este grupo
+el conjunto de roles predefined los cuales con el tiempo se iran actualizando por google
+:::
+
+###### Launch Stages
+
+los custom roles tienen 3 stage de disponibilidad para ser usados dentro de los proyectos:
+
+1. alpha: cuando estamos probando el rol
+2. beta: cuando ya fue probado y estamos esperando aprobacion
+3. ga: cuando esta disponible para su uso
+
+##### Conditions
+
+Son expresiones logicas que define cuando conceder acceso a un recurso, solo si la condicion se cumple
+
+Ejemplo
+
+Esto es util cuando queremos dar accesos a los permisos por un periodo de tiempo limitadom, para los contractors
+
+#### Metadata
+
+la metadata esta confirmada por dos elementos:
+
+1. etags: este es un mecanismo para que al momento de que multiples personas modifiquen la policy no se rompa  
+2. version: con este campo especificamos que version de schema estamos usando
+    - 1 representa un schema sencillo sin condiciones
+    - 2 representa schemas por parte de google
+    - 3 representa un schema mas complejo, el cual usa condiciones
+
+#### Audit config
+
+Con esta funcionalidad determinas que permisos o identidas las guardamos en los logs
+
+:::note
+Tenemos que recordar que esto hace que se empiece a guardar bastantes mas logs, entonces debemos tener cuidado con el billing
+y solo mandar al log los recursos o identidades importantes para no crear ruido y tampoco incrementar mucho el billing
+:::
